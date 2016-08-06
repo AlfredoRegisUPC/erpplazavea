@@ -1,0 +1,305 @@
+package pe.upc.edu.alquiler.mbeans;
+
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+
+import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import pe.upc.edu.alquiler.model.EntregaDoc;
+import pe.upc.edu.alquiler.model.Evaluacion;
+import pe.upc.edu.alquiler.model.Evaluador;
+import pe.upc.edu.alquiler.model.Locacion;
+import pe.upc.edu.alquiler.model.Locatario;
+import pe.upc.edu.alquiler.model.Solicitud;
+import pe.upc.edu.alquiler.service.AlquilerService;
+
+@ManagedBean(name="solicitudMBean")
+@RequestScoped
+@Component
+public class SolicitudMBean implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private List<Solicitud> listaSolicitudes;
+	private Solicitud solicitud= new Solicitud();;
+	
+	@PostConstruct
+    public void init() {
+		solicitud = new Solicitud();
+	}
+	
+	private Locatario locatario = new Locatario();
+	private String[] selectedRequisitos = null;
+	private Locacion locacion = new Locacion();
+	
+	FacesContext facesContext = FacesContext.getCurrentInstance();
+	
+	private Boolean disabled = true;
+	
+	@Autowired
+	private AlquilerService alquilerService;
+	
+	public SolicitudMBean() {
+		
+	}
+	
+	public int getObtenerSolicitudes() {
+		try {
+			this.listaSolicitudes = this.alquilerService.listarSolicitudes();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 1;
+	}
+
+	
+	public String registraSolicitud() {
+		solicitud= new Solicitud();
+		int idSolicitud = 0;
+		int idLocatario = 0;
+		FacesContext context = FacesContext.getCurrentInstance();
+		if(selectedRequisitos.length!=4){
+			context.addMessage(null, new FacesMessage("Error",  "Debe seleccionar toda la documentación necesaria") );
+			return "solicitud";
+		}
+		try {
+			if(locatario!=null && solicitud!=null && locacion !=null && selectedRequisitos!=null){
+			
+			if(locatario.getIdLocatario()==null){			
+				idLocatario = this.alquilerService.registrarLocatario(locatario);
+				//solicitud.setIdLocatario((long) idLocatario);
+				solicitud.setLocatario(this.alquilerService.obtenerLocatario(locatario.getRuc()));
+			}
+			else{
+			//solicitud.setIdLocatario(locatario.getIdLocatario());
+				solicitud.setLocatario(locatario);
+				idLocatario = Integer.parseInt(String.valueOf(locatario.getIdLocatario()));
+			}
+			solicitud.setIdLocacion(locacion.getIdLocacion());
+			solicitud.setEstado("Registrada");
+			solicitud.setFecha(new Date());
+			solicitud.setUsuarioCreacion("RECEPCIONISTA");
+			
+			//
+			solicitud.setSolicitante("Solicitante");
+			//
+			
+			idSolicitud =  this.alquilerService.registrarSolicitud(solicitud);
+			if(idSolicitud > 0){
+				//Al registrar una solicitud se registra la entrega de documentos
+				
+				for (int i = 0; i < selectedRequisitos.length; i++) {
+					EntregaDoc reqEntrega = new EntregaDoc();
+					reqEntrega.setIdRequisito(Long.valueOf(selectedRequisitos[i]));
+					reqEntrega.setIdSolicitud(String.valueOf(idSolicitud));
+					reqEntrega.setFechaEntrega(new Date());
+					reqEntrega.setEstado("Entregado");
+					this.alquilerService.registrarEntregaDoc(reqEntrega);
+				}				
+				
+				/*//Al registrar una solicitud se autoregistra una evaluación con un evaluador disponible 
+				int idEvaluacion = 0;
+				Evaluacion evaluacion = new Evaluacion();
+				//evaluacion.setIdSolicitud((long) idSolicitud);
+				evaluacion.setSolicitud(solicitud);
+				Evaluador evaluador = this.alquilerService.evaluadorDisponible();
+				//evaluacion.setIdEvaluador(evaluador.getIdEvaluador());
+				evaluacion.setEvaluador(evaluador);
+				//Cambiar fecha propuesta según RN*****
+				Calendar fechaProp = new GregorianCalendar();			
+				fechaProp.add(Calendar.DATE, 7);
+				evaluacion.setFechaProp(new Date(fechaProp.getTimeInMillis()));
+				//Cambiar estado inicial según RN
+				evaluacion.setEstado("Registrada");
+				evaluacion.setFechaCreacion(new Date());
+				evaluacion.setUsuarioCreacion("EVALUADOR");*/
+				//ALICIA
+				if(locatario.getRuc().length()>=12){
+					context.addMessage(null, new FacesMessage("Información",  "En número de RUC solo debe contener 11 dígitos") );
+					return null;
+				}
+				/*//ALICIA
+				//Completar datos de evaluación
+				idEvaluacion = this.alquilerService.registrarEvaluacion(evaluacion);
+				if(idEvaluacion>0)
+					//Si se registra la evaluación se cambia el estado del evaluador a No disponible
+					this.alquilerService.actualizarEvaluador(evaluacion.getEvaluador().getIdEvaluador(), "No Disponible", new Date(fechaProp.getTimeInMillis()));
+				*/
+				//if(idSolicitud>0 && idEvaluacion>0 && idLocatario>0)
+				if(idSolicitud>0 && idLocatario>0)
+					context.addMessage(null, new FacesMessage("Información",  "La solicitud fue registrada satisfactoriamente") );
+				else
+					context.addMessage(null, new FacesMessage("Error",  "Se presentaron problemas en el registro de la solicitud") );
+				
+		        context.getExternalContext().getFlash().setKeepMessages(true);
+		  
+		        
+		        locatario = new Locatario();
+				locacion = new Locacion();
+				solicitud = new Solicitud();
+				selectedRequisitos = null;
+
+			}
+			}
+			else{
+			context.addMessage(null, new FacesMessage("Información",  "Los datos están incompletos") );
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "index";
+	}
+	
+	public String cancelaSolicitud(){
+		if(locatario!=null || solicitud!=null || locacion !=null || selectedRequisitos!=null){
+		locatario = new Locatario();
+		locacion = new Locacion();
+		solicitud = new Solicitud();
+	    selectedRequisitos = null;
+		}
+		return "index";
+	}
+
+	public void getObtenerLocatario() {
+		System.out.println("en getObtenerLocatario, el RUC es:" + locatario.getRuc());
+		try {
+			String ruc = locatario.getRuc();
+			Locatario locatarioBd = this.alquilerService.obtenerLocatario(locatario.getRuc());
+			if(locatarioBd == null){
+				locatario.setRuc(ruc);
+			}
+			else{
+				this.locatario = locatarioBd;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int registrarLocatario() {
+		int regLoc = 0;
+		try {
+			regLoc = this.alquilerService.registrarLocatario(locatario);
+			if(regLoc > 0)
+			this.locatario = this.alquilerService.obtenerLocatario(locatario.getRuc());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 1;
+	}
+	public List<Solicitud> getListaSolicitudes() {
+		return listaSolicitudes;
+	}
+
+	public void setListaSolicitudes(List<Solicitud> listaSolicitudes) {
+		this.listaSolicitudes = listaSolicitudes;
+	}
+
+	public Solicitud getSolicitud() {
+		return solicitud;
+	}
+
+	public void setSolicitud(Solicitud solicitud) {
+		this.solicitud = solicitud;
+	}
+
+	public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", detail);
+        FacesContext.getCurrentInstance().addMessage("Información", message);
+    }
+
+	
+	
+	public Locatario getLocatario() {
+		return locatario;
+	}
+
+	public void setLocatario(Locatario locatario) {
+		this.locatario = locatario;
+	}
+
+	public String[] getSelectedRequisitos() {
+		return selectedRequisitos;
+	}
+
+	public void setSelectedRequisitos(String[] selectedRequisitos) {
+		this.selectedRequisitos = selectedRequisitos;
+	}
+
+	public Locacion getLocacion() {
+		return locacion;
+	}
+
+	public void setLocacion(Locacion locacion) {
+		this.locacion = locacion;
+	}
+	
+	public void showSelectedSol(ActionEvent event){
+		try {
+			//this.evaluacion = this.alquilerService.obtenerEvaluacion(idEvaluacion);
+			this.solicitud = (Solicitud) event.getComponent().getAttributes().get("sol");
+			System.out.println("Solicitud: " + solicitud.getIdSolicitud());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public String goEvalSol() {
+		   return "regEvaluacion";
+	   }
+
+	public Boolean getDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(Boolean disabled) {
+		this.disabled = disabled;
+	}
+	
+	public void onRowSelect(SelectEvent event) {
+		if(solicitud.getEstado().equals("Registrada"))
+			disabled = true;
+		else
+			disabled = false;
+	}
+//	public void validaNumero(FacesContext context, UIComponent toValidate, Object value) {
+//        boolean valida = false;
+//        if(value != null){      
+//           for (char letra : (String.valueOf(value)).toCharArray()) { 
+//              if(letra < '0' || letra < '9') { 
+//                 valida = true;
+//                 break; 
+//            } 
+//              
+//         }
+//         ((UIInput) toValidate).setValid(!valida);
+//         
+//         if(valida){
+//        FacesMessage message = new FacesMessage(" Debe ingresar un RUC válido !");
+//        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+//        context.addMessage(toValidate.getClientId(context), message);
+//         }
+//        }
+//	}
+
+}

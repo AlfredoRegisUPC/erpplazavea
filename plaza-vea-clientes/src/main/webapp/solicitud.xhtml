@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Registrar Solicitud de Alquiler de Espacio Comercial</title>
+
+ <script language="javascript">
+
+  //<![CDATA[ 
+function soloNumeros(e){
+
+	var key = window.Event ? e.which : e.keyCode
+
+	return (key >= 48 && key <= 57)
+
+}
+    //]]>
+</script>
+</h:head>
+<h:body>
+<h:form id="formSolicitud"> 
+	<p:panel id="regSolAlq" header="Registrar Solicitud de Alquiler" style="margin-bottom:20px">
+        <p:panel id="locatario" header="Locatario" style="margin-bottom:20px" >
+      <!--   <p:message for="rucLocatario" showSummary="false" showDetails="true"/>  -->
+<!--         <p:message for="email" />
+        <p:message for="razon" />
+        <p:message for="telefono" />
+        <p:message for="representante" /> -->
+        
+        <h:inputHidden value="#{solicitudMBean.locatario.idLocatario}" ></h:inputHidden>
+        <h:panelGrid columns="4" cellpadding="5">
+       		<h:outputLabel for="rucLocatario" value = "RUC " requiredMessage="El ruc es obligatorio"/>
+        	<p:inputText id="rucLocatario" name="rucLocatario" value="#{solicitudMBean.locatario.ruc}"         	
+        	required="true" size="11" label="RUC">
+ 			<f:convertNumber integerOnly="true" pattern="#######"/>
+			<f:validateLength maximum="11" minimum="11"/>   
+			<p:clientValidator event="keyup"/>      	
+    		<p:ajax event="blur" update=":formSolicitud:locatario" listener="#{solicitudMBean.getObtenerLocatario}"/>
+			</p:inputText>
+        	<h:outputLabel value = "Razón Social "/>
+        	<p:inputText id="razon" label ="Razón Social" value="#{solicitudMBean.locatario.razonSocial}" required="true" />
+        	
+        	<h:outputLabel value = "Dirección "/>
+        	<p:inputText label = "Dirección" value="#{solicitudMBean.locatario.direccion}" required="true" />
+
+			<h:outputLabel value = "Teléfono " />
+        	<p:inputText label ="Teléfono" id="telefono" value="#{solicitudMBean.locatario.telefono}" required="true"  
+        	onKeyPress="return soloNumeros(event)" />
+        	
+        	<h:outputLabel value = "Representante Legal " />
+        	<p:inputText label = "Representante Legal"  id="representante" value="#{solicitudMBean.locatario.representante}"  required="true" />
+        	
+        	<h:outputLabel value = "Correo Electrónico"  />
+        	<p:inputText id="email" value="#{solicitudMBean.locatario.correo}" required="true" size="40" 
+        	label = "Correo" validatorMessage="El formato de correo es inválido">
+        	<f:validateRegex
+			pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+        	</p:inputText>
+        </h:panelGrid>
+    	</p:panel>
+    	
+    	<p:panel id="locacion" header="Locación" style="margin-bottom:20px" >
+		<h:panelGrid columns="2" cellpadding="5" columnClasses="label, value">
+    	<h:outputLabel value = "Local "/>
+    	<p:selectOneListbox id="local" value="#{locacionMBean.local}" converter="localConverter" required="true" label="Local"
+    		var="t" filter="true" filterMatchMode="contains" style="width: 500px;">
+            <f:selectItems value="#{localMBean.listaLocales}" var="theme" 
+            itemLabel="#{theme.nombre}" itemValue="#{theme}" />
+            <p:column>
+                <h:outputText value="#{t.nombre}" />
+            </p:column>
+            <p:ajax process="@this" event="change" update=":formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
+        </p:selectOneListbox>
+        </h:panelGrid>
+
+        <h:panelGrid id="tipoUbi" columns="4" cellpadding="5" columnClasses="label, value">
+    	<h:outputLabel value = "Tamaño "/>
+    	<p:selectOneListbox id="tipo" value = "#{locacionMBean.tipo}" required="true" label="Tamaño">
+            <f:selectItem itemLabel="Grande" itemValue="Grande" />
+            <f:selectItem itemLabel="Mediano" itemValue="Mediano" />
+            <f:selectItem itemLabel="Pequeño" itemValue="Pequeño" />
+            <p:ajax process="@this" event="change" update=":formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
+    	</p:selectOneListbox>
+    	<h:outputLabel value = "Ubicación "/>
+    	<p:selectOneListbox id="ubicacion" value = "#{locacionMBean.ubicacion}" required="true" label="Ubicación">
+    	<f:selectItem itemLabel="Entrada" itemValue="Entrada"/>
+    	<f:selectItem itemLabel="Centro" itemValue="Centro" />
+    	<f:selectItem itemLabel="Salida" itemValue="Salida" />
+    	<p:ajax process="@this"  event="change" update=":formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
+    	</p:selectOneListbox>
+    	</h:panelGrid>
+    	
+    	<h:panelGrid id="locSelect" columns="3" cellpadding="10">
+    	<h:outputLabel value = "Locación "/>
+    	<p:selectOneListbox id="locacionSelect" value="#{solicitudMBean.locacion}" required="true" label="Locación"
+			converter="locacionConverter"
+    		var="o" filter="true" filterMatchMode="contains" style="width: 300px;">
+            <f:selectItems value="#{locacionMBean.listaLocaciones}" var="loc" 
+            itemLabel="#{loc.dimensiones}" itemValue="#{loc}" />
+            <p:column>
+                <h:outputText value="#{o.ubicacion}" />
+            </p:column>
+            <p:column>
+                <h:outputText value="#{o.tipo}" />
+            </p:column>
+            <p:column>
+                <h:outputText value="#{o.dimensiones}" />
+            </p:column>
+            <p:column>
+                <h:outputText value="#{o.estado}" />
+            </p:column>
+        </p:selectOneListbox>
+        
+        <p:outputLabel value = "#{locacionMBean.mensaje}"/>
+        
+    	</h:panelGrid>    	
+    	</p:panel>
+
+    	<p:panel id="requisitos" header="Requisitos" style="margin-bottom:20px" >
+		<h:selectManyCheckbox value = "#{solicitudMBean.selectedRequisitos}" required="true" requiredMessage="Debe seleccionar toda la documentación requerida."
+   		validatorMessage="#{msg.REQUIRED}">
+		<f:selectItems value = "#{requisitoMBean.listaRequisitos}" var = "r"
+		itemLabel = "#{r.detalle}" itemValue="#{r.idRequisito}"/>
+		</h:selectManyCheckbox>
+    	</p:panel>
+
+    	<h:outputLabel value = "Solicitante "/>
+        <p:inputText  required="true" label="Solicitante" style="width: 500px;"/>
+        
+        <h:panelGrid columns="4" cellpadding="10" >
+	    <p:growl id="message" showDetail="true" autoUpdate="true" life="1500"/>
+	 
+	    <p:commandButton value="Registrar" action="#{solicitudMBean.registraSolicitud}" update="message">
+	        <p:confirm header="Confirmación" message="Seguro que desea registrar la solicitud?" icon="ui-icon-alert" />
+	    </p:commandButton>
+		
+    	<p:commandButton value="Cancelar" action="#{solicitudMBean.cancelaSolicitud}" process="@this">
+    	 <p:confirm header="Confirmación" message="Seguro que desea cancelar el registro de la solicitud?" icon="ui-icon-alert" />
+    	</p:commandButton>
+    	
+    	
+    		    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	    </p:confirmDialog>
+    	
+    	</h:panelGrid>
+    	
+    </p:panel>
+    </h:form>
+</h:body>
+</html>

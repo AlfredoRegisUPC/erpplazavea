@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Informes de Evaluaciones</title>
+</h:head>
+<h:body>
+<h:form id="informes">
+<p:accordionPanel multiple="true">
+        <p:tab title="Informe de Estado Empresarial">
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:graphicImage value="/resources/images/sunat.jpeg" />
+                <h:panelGrid columns="2" cellpadding="5">
+       		
+	    		<h:outputLabel value = "Estado de contribuyente " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEstEmp.estadoContri}"/>
+        		<h:outputLabel value = "Actividad Económica Principal " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEstEmp.actEconPrin}"/>
+	    		<h:outputLabel value = "Omisiones Tributarias " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEstEmp.omisiones}"/>
+        		<h:outputLabel value = "Fecha de Informe " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEstEmp.fecha}"/>
+        		<h:outputLabel value = "Observaciones " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEstEmp.comentario}"/>
+        		<h:outputLabel value = "Estado de Informe " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEstEmp.estado}"/>
+        		
+        		</h:panelGrid>
+            </h:panelGrid>
+        </p:tab>
+        <p:tab title="Informe de Sanciones">
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:graphicImage value="/resources/images/sbs.jpeg" />
+                <h:panelGrid columns="2" cellpadding="5">
+       		
+	    		<h:outputLabel value = "Antecedentes Bancarios " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infSanciones.antBancario}"/>
+        		<h:outputLabel value = "Monto de Deuda " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infSanciones.montoDeuda}"/>
+        		<h:outputLabel value = "Fecha de Informe " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infSanciones.fecha}"/>
+        		<h:outputLabel value = "Observaciones " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infSanciones.comentario}"/>
+        		<h:outputLabel value = "Estado de Informe " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infSanciones.estado}"/>
+        		
+        		</h:panelGrid>
+            </h:panelGrid>
+        </p:tab>
+        <p:tab title="Informe de Evaluación de Mercado">
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:graphicImage value="/resources/images/redesSociales.png" />
+                <h:panelGrid columns="2" cellpadding="5">
+       		
+        		<h:outputLabel value = "Fecha de Informe " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEvalMerc.fecha}"/>
+        		<h:outputLabel value = "Observaciones " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEvalMerc.comentario}"/>
+        		<h:outputLabel value = "Estado de Informe " style="font-weight:bold;"/>
+        		<p:outputLabel value="#{informesMBean.infEvalMerc.estado}"/>
+        		
+        		</h:panelGrid>
+            </h:panelGrid>
+        </p:tab>
+    </p:accordionPanel>
+</h:form>
+</h:body>
+</html>

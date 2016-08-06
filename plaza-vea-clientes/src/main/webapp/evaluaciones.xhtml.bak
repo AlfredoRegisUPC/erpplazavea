@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Evaluaciones de Alquiler de Espacio Comercial</title>
+</h:head>
+<h:body>
+ <div style="background:rgb(205, 7, 28); width: 300px; height: 100px; " align="center">
+    		<p:graphicImage value="/resources/images/plazavea.png" width="200" height="100"  />
+    </div >
+    <h:form id="form">
+    <div align="right">
+    <p:commandButton action="index" value="Menú"  icon="ui-icon-home"
+        style="background-color:rgb(235, 235, 235);background-origin:padding-box; border-bottom-color:rgb(170, 170, 170); font-family:'Varela Round', sans-serif;
+        font-size:20px;"/>
+    </div>    
+	<p:panel id="basic" header="Lista de Evaluaciones de Solicitud de Alquiler" style="margin-bottom:20px">
+        <h:panelGrid columns="1" cellpadding="10">
+            <c:if test="${evaluacionMBean.obtenerEvaluaciones != 0}">
+            	<p:dataTable id="myTable" var="eval" value="#{evaluacionMBean.listaEvaluaciones}" 
+            	selection="#{evaluacionMBean.evaluacion}" emptyMessage="No existen evaluaciones según los filtros ingresados">
+				    <p:ajax event="rowSelect" update=":form:myTable:selectRowBtn :form:message :form:myTable" listener="#{evaluacionMBean.onRowSelect}" />
+				    <p:column headerText="Id">
+				        <h:outputText value="#{eval.idEvaluacion}" />
+				    </p:column>
+				 
+				    <p:column id="fechaHeader" filterBy="#{eval.fechaCreacion}" sortBy="#{eval.fechaCreacion}">
+				        <f:facet name="header">
+               			 <h:outputText value="Fecha" />
+            			</f:facet>
+				        <h:outputText value="#{eval.fechaCreacion}" />
+				    </p:column>
+				 
+				    <p:column id="rucHeader" filterBy="#{eval.solicitud.locatario.ruc}" sortBy="#{eval.solicitud.locatario.ruc}">
+				        <f:facet name="header">
+               			 <h:outputText value="RUC" />
+            			</f:facet>
+				        <h:outputText value="#{eval.solicitud.locatario.ruc}" />
+				    </p:column>
+				    <p:column id="razSocHeader" filterBy="#{eval.solicitud.locatario.razonSocial}" sortBy="#{eval.solicitud.locatario.razonSocial}">
+				        <f:facet name="header">
+               			 <h:outputText value="Razón Social" />
+            			</f:facet>
+				        <h:outputText value="#{eval.solicitud.locatario.razonSocial}" />
+				    </p:column>
+				    
+				      <p:column id="estadoHeader" filterBy="#{eval.estado}" sortBy="#{eval.estado}">
+				        <f:facet name="header">
+               			 <h:outputText value="Estado" />
+            			</f:facet>
+				        <h:outputText value="#{eval.estado}" />
+				    </p:column>
+				    
+				      <p:column style="width:30px;text-align: center">
+				        <p:commandButton id="selectRowBtn" icon="ui-icon-pencil" style="width:35px;text-align: center" process="@this"  immediate="true"
+				        actionListener="#{evaluacionMBean.showSelectedEval}" action="#{evaluacionMBean.goEditPage}"
+				        disabled="#{eval.estado == 'Registrada' ? false : true}">
+				        <f:attribute name="eval" value="#{eval}"/>
+				        </p:commandButton>
+				      </p:column>
+				      
+				       <p:column style="width:30px;text-align: center">
+					        <p:commandButton id="selectRowDel" icon="ui-icon-close" style="width:35px;text-align: center" process="@this"  immediate="true"
+					        actionListener="#{evaluacionMBean.delSelectedEval}" action="#{evaluacionMBean.goListPage}" ajax="true" update=":form:myTable"
+					        disabled="#{eval.estado == 'Registrada' ? false : true}">
+					        <f:attribute name="eval" value="#{eval}"/>
+					        <p:confirm header="Confirmación" message="Seguro que desea eliminar la evaluación?" icon="ui-icon-alert" />
+					        </p:commandButton>
+					        
+					        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+						        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						    </p:confirmDialog>
+				      </p:column>
+				      
+				</p:dataTable>
+            </c:if>
+        </h:panelGrid>
+    </p:panel>
+    
+    <p:growl id="message" showDetail="true" autoUpdate="true" life="1500"/>
+    </h:form>
+</h:body>
+</html>

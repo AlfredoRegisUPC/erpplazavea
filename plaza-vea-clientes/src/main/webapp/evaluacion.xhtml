@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Actualizar Evaluación de Solicitud de Alquiler de Espacio Comercial</title>
+        <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/main.css"/>
+</h:head>
+<h:body>
+<nav class="navbar navbar-plazavea navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+           <!--  <a class="navbar-brand" href="#">
+                <img class="brand-img" src="//plazavea.vteximg.com.br/arquivos/logo-plazavea.png" alt="Plaza Vea">
+            </a> -->
+            <p:graphicImage class="navbar-brand" value="/resources/images/plazavea.png" width="200" height="100"  />
+        </div>
+    </div>
+</nav>
+    
+ <h:form id="formEvaluacion">
+	<p:panel id="actEvalSolAlq" header="Actualizar Evaluación de Solicitud de Alquiler" style="margin-bottom:20px">
+        <p:panel id="evaluacion" header="Evaluación Solicitud de Alquiler" style="margin-bottom:20px" >
+        <h:panelGrid columns="4" cellpadding="5">
+       		<h:outputLabel value = "ID Evaluación " style="font-weight:bold;"/>
+        	<h:outputText id="idEvaluacion" value="#{evaluacionMBean.evaluacion.idEvaluacion}" />
+        	   
+        	<h:outputLabel value = "Fecha de Solicitud " style="font-weight:bold;"/>
+        	<h:outputText value="#{evaluacionMBean.evaluacion.solicitud.fecha}">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</h:outputText> 
+        	
+        	<h:outputLabel value = "RUC " style="font-weight:bold;"/>
+        	<h:outputText value="#{evaluacionMBean.evaluacion.solicitud.locatario.ruc}"/>
+
+			<h:outputLabel value = "Razón Social " style="font-weight:bold;"/>
+        	<h:outputText value="#{evaluacionMBean.evaluacion.solicitud.locatario.razonSocial}"/>
+        	
+        	<h:outputLabel value = "Representante Legal " style="font-weight:bold;"/>
+        	<h:outputText value="#{evaluacionMBean.evaluacion.solicitud.locatario.representante}"/>
+	
+			<h:outputLabel value = "ID Evaluador " style="font-weight:bold;"/>
+        	<h:outputText value="#{evaluacionMBean.evaluacion.evaluador.idEvaluador}"/>
+        	
+        	<h:outputLabel value = "Evaluador " style="font-weight:bold;"/>
+        	<h:outputText value="#{evaluacionMBean.evaluacion.evaluador.colaborador.nombres} #{evaluacionMBean.evaluacion.evaluador.colaborador.apellidos}"/>
+        	   
+        	<h:outputLabel value = "Fecha Propuesta " style="font-weight:bold;"/>
+        	<h:outputText value="#{evaluacionMBean.evaluacion.fechaProp}">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</h:outputText> 
+
+	    
+	    <h:outputLabel value = "Observación " style="font-weight:bold;"/>
+        <h:inputTextarea value="#{evaluacionMBean.evaluacion.observacion}" required="true" label="Observacion"/>
+        	
+        <h:outputLabel value = "Estado " style="font-weight:bold;"/>
+        <p:selectOneListbox id="estado" value = "#{evaluacionMBean.evaluacion.estado}" required="true" label="Estado">
+            <f:selectItem itemLabel="Aprobada" itemValue="Aprobada" />
+            <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
+    	</p:selectOneListbox>
+	    	
+	    
+        </h:panelGrid>
+    	</p:panel> 
+		
+		<h:panelGrid columns="4" cellpadding="10" >
+			
+			<p:commandButton value="Consultar Informes" actionListener="#{informesMBean.getObtenerInformes(evaluacionMBean.evaluacion.idEvaluacion)}" immediate="true">
+			<p:ajax event="dialogReturn"  listener="#{evaluacionMBean.onCarChosen}" update="growl">
+			</p:ajax>
+			</p:commandButton>
+	 
+	     <p:commandButton value="Actualizar" action="#{evaluacionMBean.actualizarEvaluacion}" update="message">
+	        <p:confirm header="Confirmación" message="Seguro que desea actualizar la evaluación?" icon="ui-icon-alert" />
+	    </p:commandButton>
+		
+    	<p:commandButton value="Cancelar" action="#{evaluacionMBean.cancelaEvaluacion}" process="@this">
+    	 	<p:confirm header="Confirmación" message="Seguro que desea cancelar el registro de la evaluación?" icon="ui-icon-alert" />
+    	</p:commandButton>
+    	
+    	
+    	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	    </p:confirmDialog>
+	    
+	    <p:growl id="growl" showDetail="true" />
+	    <p:growl id="message" showDetail="true" autoUpdate="true" life="1500"/>
+    	
+    	</h:panelGrid>
+
+    </p:panel>
+</h:form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+</h:body>
+</html>

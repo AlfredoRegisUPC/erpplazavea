@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+              http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+ 
+    <application>
+        <el-resolver>
+            org.springframework.web.jsf.el.SpringBeanFacesELResolver
+        </el-resolver>
+        <action-listener>org.primefaces.application.DialogActionListener</action-listener>
+        <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+        <view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+        <message-bundle>pe.upc.edu.resource.Message</message-bundle>
+    </application>
+    
+    <managed-bean>
+    <managed-bean-name>locatarioBean</managed-bean-name>
+    <managed-bean-class>pe.upc.edu.alquiler.model.Locatario</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+    <managed-bean-name>locatarioMBean</managed-bean-name>
+    <managed-bean-class>pe.upc.edu.alquiler.mbeans.LocatarioMBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+     <property-name>locatarioBean</property-name>
+     <value>#{locatarioBean}</value>
+    </managed-property>
+</managed-bean>
+
+<navigation-rule>
+   <from-view-id>/index.xhtml</from-view-id>
+   <navigation-case>
+      <from-outcome>index</from-outcome>
+      <to-view-id>/index.xhtml</to-view-id>
+   </navigation-case>
+   <navigation-case>
+      <from-outcome>solicitud</from-outcome>
+      <to-view-id>/solicitud.xhtml</to-view-id>
+   </navigation-case>
+      <navigation-case>
+      <from-outcome>evaluaciones</from-outcome>
+      <to-view-id>/evaluaciones.xhtml</to-view-id>
+   </navigation-case>
+   <navigation-case>
+      <from-outcome>evaluacion</from-outcome>
+      <to-view-id>/evaluacion.xhtml</to-view-id>
+   </navigation-case>
+   <navigation-case>
+      <from-outcome>informes</from-outcome>
+      <to-view-id>/informes.xhtml</to-view-id>
+   </navigation-case>
+   <navigation-case>
+      <from-outcome>solicitudes</from-outcome>
+      <to-view-id>/solicitudes.xhtml</to-view-id>
+   </navigation-case>
+   <navigation-case>
+      <from-outcome>regEvaluacion</from-outcome>
+      <to-view-id>/regEvaluacion.xhtml</to-view-id>
+   </navigation-case>
+</navigation-rule>
+     
+</faces-config>

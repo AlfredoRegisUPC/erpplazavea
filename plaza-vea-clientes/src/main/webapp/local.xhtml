@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Plaza Vea</title>
+</h:head>
+<h:body>
+	<p:panel id="basic" header="Lista de Locales" style="margin-bottom:20px">
+        <h:panelGrid columns="1" cellpadding="10">
+            <c:if test="${localMBean.obtenerLocales != 0}">
+            	<p:dataTable var="local" value="#{localMBean.listaLocales}">
+				    <p:column headerText="Id">
+				        <h:outputText value="#{local.idLocal}" />
+				    </p:column>
+				 
+				    <p:column headerText="Numero">
+				        <h:outputText value="#{local.numeroLocal}" />
+				    </p:column>
+				 
+				    <p:column headerText="Ubigeo">
+				        <h:outputText value="#{local.ubigeo}" />
+				    </p:column>
+				    <p:column headerText="Apertura">
+				        <h:outputText value="#{local.fechaApertura}" />
+				    </p:column>
+				</p:dataTable>
+            </c:if>
+        </h:panelGrid>
+    </p:panel>
+</h:body>
+</html>

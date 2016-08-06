@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Solicitudes de Alquiler de Espacio Comercial</title>
+    <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/main.css"/>
+</h:head>
+<h:body>
+<nav class="navbar navbar-plazavea navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+           <!--  <a class="navbar-brand" href="#">
+                <img class="brand-img" src="//plazavea.vteximg.com.br/arquivos/logo-plazavea.png" alt="Plaza Vea">
+            </a> -->
+            <p:graphicImage class="navbar-brand" value="/resources/images/plazavea.png" width="200" height="100"  />
+        </div>
+    </div>
+</nav>
+<h:form id="formSol">
+    <!-- <p:growl id="message" showDetail="true" autoUpdate="true" life="1500"/> -->
+    <div class="container-fuild">
+    <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+	
+	
+    <h:panelGrid columns="1" cellpadding="5" >
+    <ul class="nav nav-sidebar">
+    <li class="active"><a href="#">Gestión de Terceros</a></li>
+    
+        <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="solicitudes" value="Solicitudes de Alquiler de Espacio Comercial"/>
+        <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="evaluaciones" value="Evaluaciones de Solicitudes de Alquiler de Espacio Comercial" />
+    </ul>
+    </h:panelGrid>
+
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">Gestión de Terceros</h1>
+            <div  class="main">
+    <!-- <h:form id="formSol"> -->
+    <div align="right">
+<!--     <p:commandButton action="index" value="Menú"  icon="ui-icon-home"
+        style="background-color:rgb(235, 235, 235);background-origin:padding-box; border-bottom-color:rgb(170, 170, 170); font-family:'Varela Round', sans-serif;
+        font-size:20px;"/> -->
+    <p:commandButton action="solicitud" value="Registrar Solicitud"  icon="ui-icon-document"
+        style="background-color:rgb(235, 235, 235);background-origin:padding-box; border-bottom-color:rgb(170, 170, 170); font-family:'Varela Round', sans-serif;
+        font-size:20px;"/>
+    </div>    
+	<p:panel id="basic" header="Lista de Solicitudes de Alquiler" style="margin-bottom:20px">
+        <h:panelGrid columns="1" cellpadding="10">
+            <c:if test="${solicitudMBean.obtenerSolicitudes != 0}">
+            	<p:dataTable id="myTable" var="sol" value="#{solicitudMBean.listaSolicitudes}" 
+            	selection="#{solicitudMBean.solicitud}" emptyMessage="No existen solicitudes según los filtros ingresados">
+				    <p:ajax event="rowSelect" update=":formSol:myTable:selectRowBtn :formSol:message :formSol:myTable" listener="#{solicitudMBean.onRowSelect}" />
+				    <p:column headerText="Id">
+				        <h:outputText value="#{sol.idSolicitud}" />
+				    </p:column>
+				 
+				    <p:column id="fechaHeader" filterBy="#{sol.fecha}" sortBy="#{sol.fecha}">
+				        <f:facet name="header">
+               			 <h:outputText value="Fecha" />
+            			</f:facet>
+				        <h:outputText value="#{sol.fecha}" />
+				    </p:column>
+				 
+				    <p:column id="rucHeader" filterBy="#{sol.locatario.ruc}" sortBy="#{sol.locatario.ruc}">
+				        <f:facet name="header">
+               			 <h:outputText value="RUC" />
+            			</f:facet>
+				        <h:outputText value="#{sol.locatario.ruc}" />
+				    </p:column>
+				    <p:column id="razSocHeader" filterBy="#{sol.locatario.razonSocial}" sortBy="#{sol.locatario.razonSocial}">
+				        <f:facet name="header">
+               			 <h:outputText value="Razón Social" />
+            			</f:facet>
+				        <h:outputText value="#{sol.locatario.razonSocial}" />
+				    </p:column>
+				    
+				      <p:column id="estadoHeader" filterBy="#{sol.estado}" sortBy="#{sol.estado}">
+				        <f:facet name="header">
+               			 <h:outputText value="Estado" />
+            			</f:facet>
+				        <h:outputText value="#{sol.estado}" />
+				    </p:column>
+				    
+				      <p:column style="text-align: center">
+				       <f:facet name="header">
+               			 <h:outputText value="Evaluar" />
+            			</f:facet>
+				        <p:commandButton id="selectRowBtn" icon="ui-icon-check" style="text-align: center" process="@this"  immediate="true"
+				        actionListener="#{evaluacionMBean.showSelectedSol}" action="#{solicitudMBean.goEvalSol}"
+				        disabled="#{sol.estado == 'Registrada' ? false : true}">
+				        <f:attribute name="sol" value="#{sol}"/>
+				        </p:commandButton>
+				      </p:column>
+				     
+				      
+				</p:dataTable>
+            </c:if>
+        </h:panelGrid>
+    </p:panel>
+    
+    <p:growl id="message" showDetail="true" autoUpdate="true" life="1500"/>
+   <!--  </h:form> -->
+            </div>
+        </div>
+    </div>
+    </div>
+    </h:form>
+    <br/>
+    
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+</h:body>
+</html>

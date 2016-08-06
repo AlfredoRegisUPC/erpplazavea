@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#index.xhtml" PATH="/index.xhtml"
+  SHAPE="256,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#index.xhtml:0" NAME="item"
+   PATH="/index.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="index::#index.xhtml" NAME="output"
+    PATH="/index.xhtml" TARGET="rules:#index.xhtml" TITLE="index" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solicitud::#solicitud.xhtml" NAME="output1"
+    PATH="/solicitud.xhtml" TARGET="rules:#solicitud.xhtml"
+    TITLE="solicitud" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="evaluaciones::#evaluaciones.xhtml"
+    NAME="output2" PATH="/evaluaciones.xhtml"
+    TARGET="rules:#evaluaciones.xhtml" TITLE="evaluaciones" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="evaluacion::#evaluacion.xhtml"
+    NAME="output3" PATH="/evaluacion.xhtml"
+    TARGET="rules:#evaluacion.xhtml" TITLE="evaluacion" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="informes::#informes.xhtml" NAME="output4"
+    PATH="/informes.xhtml" TARGET="rules:#informes.xhtml"
+    TITLE="informes" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="solicitudes::#solicitudes.xhtml"
+    NAME="output5" PATH="/solicitudes.xhtml"
+    TARGET="rules:#solicitudes.xhtml" TITLE="solicitudes" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="regEvaluacion::#regEvaluacion.xhtml"
+    NAME="output6" PATH="/regEvaluacion.xhtml"
+    TARGET="rules:#regEvaluacion.xhtml" TITLE="regEvaluacion" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#solicitud.xhtml" PATH="/solicitud.xhtml"
+  SHAPE="256,177,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#evaluacion.xhtml" PATH="/evaluacion.xhtml"
+  SHAPE="496,225,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#evaluaciones.xhtml"
+  PATH="/evaluaciones.xhtml" SHAPE="496,17,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#informes.xhtml" PATH="/informes.xhtml"
+  SHAPE="512,257,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#regEvaluacion.xhtml"
+  PATH="/regEvaluacion.xhtml" SHAPE="512,545,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#solicitudes.xhtml" PATH="/solicitudes.xhtml"
+  SHAPE="512,321,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

@@ -1,0 +1,150 @@
+package pe.upc.edu.alquiler.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
+
+/**
+ * CREATE TABLE `plazaveadb`.`local` (
+ *  `idlocal` INT NOT NULL AUTO_INCREMENT,
+ * `numeroLocal` INT NOT NULL,
+ * `ubigeo` VARCHAR(6) NOT NULL,
+ * `fechaApertura` DATE NOT NULL,
+ * PRIMARY KEY (`idlocal`));
+ * @author fest
+ *
+ */
+
+@Entity
+@Table(name="solicitud")
+public class Solicitud implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+    @Column(name="idSolicitud")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long idSolicitud;
+	
+	@Column(name="codSolicitud")
+	private String codSolicitud;
+	
+	@Column(name="fecha")
+	@Type(type="date")
+	private Date fecha;
+	
+	@Column(name="solicitante")
+	private String solicitante;
+	
+	@Column(name="estado")
+	private String estado;
+
+	@Column(name="idLocacion")
+	private Long idLocacion;
+	
+	/*@Column(name="idLocatario")
+	private Long idLocatario;*/
+	
+	@ManyToOne
+    @JoinColumn(name = "idLocatario")
+	private Locatario locatario;
+
+	@Column(name="usuarioCreacion")
+	private String usuarioCreacion;
+	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "solicitud", cascade = CascadeType.ALL)
+	private Evaluacion evaluacion;
+
+
+	public Long getIdSolicitud() {
+		return idSolicitud;
+	}
+
+	public void setIdSolicitud(Long idSolicitud) {
+		this.idSolicitud = idSolicitud;
+	}
+
+	public String getCodSolicitud() {
+		return codSolicitud;
+	}
+
+	public void setCodSolicitud(String codSolicitud) {
+		this.codSolicitud = codSolicitud;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getSolicitante() {
+		return solicitante;
+	}
+
+	public void setSolicitante(String solicitante) {
+		this.solicitante = solicitante;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public Long getIdLocacion() {
+		return idLocacion;
+	}
+
+	public void setIdLocacion(Long idLocacion) {
+		this.idLocacion = idLocacion;
+	}
+
+	/*public Long getIdLocatario() {
+		return idLocatario;
+	}
+
+	public void setIdLocatario(Long idLocatario) {
+		this.idLocatario = idLocatario;
+	}*/
+
+	public String getUsuarioCreacion() {
+		return usuarioCreacion;
+	}
+
+	public void setUsuarioCreacion(String usuarioCreacion) {
+		this.usuarioCreacion = usuarioCreacion;
+	}
+
+	public Locatario getLocatario() {
+		return locatario;
+	}
+
+	public void setLocatario(Locatario locatario) {
+		this.locatario = locatario;
+	}
+	
+	
+	
+	
+}

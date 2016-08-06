@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Plaza Vea</title>
+    <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/main.css"/>
+</h:head>
+<h:body>
+<nav class="navbar navbar-plazavea navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+           <!--  <a class="navbar-brand" href="#">
+                <img class="brand-img" src="//plazavea.vteximg.com.br/arquivos/logo-plazavea.png" alt="Plaza Vea">
+            </a> -->
+            <p:graphicImage class="navbar-brand" value="/resources/images/plazavea.png" width="200" height="100"  />
+        </div>
+    </div>
+</nav>
+ 	<!-- <div style="background:rgb(205, 7, 28); width: 300px; height: 100px; " align="center">
+    		<p:graphicImage value="/resources/images/plazavea.png" width="200" height="100"  />
+    </div> -->
+    
+	<!--  <p:panel id="menu" header="Menú" style="margin-bottom:20px">  -->
+	
+    <h:form>
+    <p:growl id="message" showDetail="true" autoUpdate="true" life="1500"/>
+    <div class="container-fuild">
+    <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+	
+	
+    <h:panelGrid columns="1" cellpadding="5" >
+    <ul class="nav nav-sidebar">
+    <li class="active"><a href="#">Gestión de Terceros</a></li>
+    
+        <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="solicitudes" value="Solicitudes de Alquiler de Espacio Comercial"/>
+        <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="evaluaciones" value="Evaluaciones de Solicitudes de Alquiler de Espacio Comercial" />
+    </ul>
+    </h:panelGrid>
+
+    </div>
+    </div>
+    </div>
+    </h:form><br/>
+    
+    <!-- </p:panel> -->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+</h:body>
+</html>
