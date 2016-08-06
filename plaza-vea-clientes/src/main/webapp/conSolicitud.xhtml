@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Consulta de Solicitud de Alquiler de Espacio Comercial</title>
+    <h:outputScript library="primefaces" name="jquery/jquery.js" />
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/main.css"/>  
+</h:head>
+<h:body>
+<nav class="navbar navbar-plazavea navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <p:graphicImage class="navbar-brand" value="/resources/images/plazavea.png" width="200" height="100"  />
+        </div>
+    </div>
+</nav>
+<h:form id="form">   
+    <div class="container-fuild">
+    	<div class="row">
+    		<div class="col-sm-3 col-md-2 sidebar">
+    
+			    <h:panelGrid columns="1" cellpadding="5" >
+					<ul class="nav nav-sidebar">
+					 <li><a href="#">Gestión de Góndolas</a></li>
+					 <li><a href="#">Gestión de Recursos Humanos</a></li>
+					 <li class="active"><a href="#">Gestión de Terceros</a></li>					
+					    <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="solicitudes" value="Solicitudes de Alquiler de Espacio Comercial"/>
+						<h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="evaluaciones" value="Evaluaciones de Solicitudes de Alquiler de Espacio Comercial" />
+					</ul>
+			    </h:panelGrid>
+
+    		</div>
+    		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"> 
+<h:form id="conSol">
+<p:panel id="conSolicitud" header="Consulta de Solicitud de Alquiler de Espacio Comercial" style="margin-bottom:20px">
+<p:accordionPanel multiple="true">
+        <p:tab title="Solicitud de Alquiler de Espacio Comercial">
+            <h:panelGrid columns="4" cellpadding="10">               
+       		<h:outputLabel value = "Código de Solicitud" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="codSolicitud" value="#{solicitudMBean.solicitud.codSolicitud}" />
+        	
+        	<h:outputLabel value = "Estado " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="estSolicitud" value="#{solicitudMBean.solicitud.estado}" />
+       
+        	<h:outputLabel value = "Fecha de Solicitud " style="font-weight:bold;margin-right:10px;margin-left:20px;"/>
+        	<h:outputText value="#{solicitudMBean.solicitud.fecha}">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</h:outputText> 
+        	
+        	<h:outputLabel value = "Solicitante " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="solSolicitud" value="#{solicitudMBean.solicitud.solicitante}" />
+        	</h:panelGrid>
+        	
+        	<p:panel id="locatario" header="Locatario" style="margin-bottom:20px" >
+        
+        	<h:panelGrid columns="4" cellpadding="5">
+       		<h:outputLabel for="rucLocatario" value = "RUC " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="rucLocatario" name="rucLocatario" value="#{solicitudMBean.solicitud.locatario.ruc}"/>
+ 			
+        	<h:outputLabel value = "Razón Social" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="razon" label ="Razón Social" value="#{solicitudMBean.solicitud.locatario.razonSocial}" />
+        	
+        	<h:outputLabel value = "Dirección" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText label = "Dirección" value="#{solicitudMBean.solicitud.locatario.direccion}"/>
+
+			<h:outputLabel value = "Teléfono" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText label ="Teléfono" id="telefono" value="#{solicitudMBean.solicitud.locatario.telefono}"/>
+        	
+        	<h:outputLabel value = "Representante Legal" style="font-weight:bold;margin-right:10px;" />
+        	<h:outputText label = "Representante Legal"  id="representante" value="#{solicitudMBean.solicitud.locatario.representante}"/>
+        	
+        	<h:outputLabel value = "Correo Electrónico"  style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="email" value="#{solicitudMBean.locatario.correo}"/>
+
+        	<p:selectBooleanCheckbox value="#{solicitudMBean.solicitud.locatario.facebook == null ? false : true}" label="Facebook" itemLabel="Facebook" disabled="true"/>
+        	<p:selectBooleanCheckbox value="#{solicitudMBean.solicitud.locatario.twitter == null ? false : true}" label="Twitter"  itemLabel="Twitter" disabled="true"/>
+        	<p:selectBooleanCheckbox value="#{solicitudMBean.solicitud.locatario.instagram == null ? false : true}" label="Instagram"  itemLabel="Instagram" disabled="true"/>
+        </h:panelGrid>
+    	</p:panel>
+        <p:panel id="locacion" header="Locación" style="margin-bottom:20px" >
+		<h:panelGrid columns="2" cellpadding="5" columnClasses="label, value">
+    	<h:outputLabel value = "Local" style="font-weight:bold;margin-right:10px;"/>
+    	<h:outputText id="locNom" value="#{solicitudMBean.solicitud.locacion.local.nombre}"/>
+    	<h:outputLabel value = "Ubicado en" style="font-weight:bold;margin-right:10px;"/>
+    	<h:outputText id="locDir" value="#{solicitudMBean.solicitud.locacion.local.direccion} - #{solicitudMBean.solicitud.locacion.local.ubigeo.distrito} - #{solicitudMBean.solicitud.locacion.local.ubigeo.provincia} - #{solicitudMBean.solicitud.locacion.local.ubigeo.departamento}"/>
+        <h:outputLabel value = "Características" style="font-weight:bold;margin-right:10px;"/>
+    	<h:outputText id="locCar" value="#{solicitudMBean.solicitud.locacion.ubicacion} - #{solicitudMBean.solicitud.locacion.tipo} - #{solicitudMBean.solicitud.locacion.dimensiones}"/>
+        </h:panelGrid>
+        </p:panel>
+        </p:tab>
+        
+        <p:tab title="Evaluación de Solicitud de Alquiler de Espacio Comercial">
+        <h:outputText value="#{solicitudMBean.menEval}" style="font-weight:bold;color:red;"/>
+        <h:panelGrid columns="2" cellpadding="10">         
+        	<h:outputLabel value = "Código de Evaluación" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{solicitudMBean.solicitud.codSolicitud}"/>
+        	
+        	<h:outputLabel value = "Fecha Límite" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{solicitudMBean.evaluacion.fechaProp}">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</h:outputText>
+        	
+            <h:outputLabel value = "Evaluador" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{solicitudMBean.evaluacion.evaluador.colaborador.nombres} #{solicitudMBean.evaluacion.evaluador.colaborador.apellidos}"/>
+        	
+        	   
+		    <h:outputLabel value = "Observación " style="font-weight:bold;margin-right:10px;"/>
+	        <h:outputText value="#{solicitudMBean.evaluacion.observacion}" label="Observacion"/>
+	        	
+	        <h:outputLabel value = "Estado " style="font-weight:bold;margin-right:10px;"/>      
+	        <h:outputText value="#{solicitudMBean.evaluacion.estado}" label="Estado"/>  
+        </h:panelGrid>    
+        </p:tab>
+       
+        
+        <!-- <c:if test="#{solicitudMBean.infEstEmp} != null"> -->
+        <p:tab title="Informe de Estado Empresarial">
+        	<h:outputText value="#{solicitudMBean.menInfEstEmp}" style="font-weight:bold;color:red;"/>
+        	
+            
+            <h:panelGrid columns="2" cellpadding="10">
+            
+            <h:outputLabel value = "Código" style="font-weight:bold;"/>
+        	<h:outputText value="#{solicitudMBean.infEstEmp.codInfEstEmp}"/>
+        	
+        	<h:outputLabel value = "Fecha" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{solicitudMBean.infEstEmp.fecha}">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</h:outputText>
+        	
+    		<h:outputLabel value = "Resultado de Evaluación " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="resEval" value="#{solicitudMBean.infEstEmp.resultado}"/>
+    		
+	    	<h:outputLabel value = "Comentario " style="font-weight:bold;margin-right:10px;"/>
+	        <h:outputText value="#{solicitudMBean.infEstEmp.comentario}" label="Comentarios"/>
+        
+    	    <h:outputLabel value = "Estado " style="font-weight:bold;margin-right:10px;"/>
+    	    <c:choose>
+			    <c:when test="${solicitudMBean.infEstEmp.estado eq 1}">
+			    	<h:outputText value="Registrada" label="Estado"/>
+			    </c:when>			
+			    <c:when test="${solicitudMBean.infEstEmp.estado eq 2}">
+			    	<h:outputText value="Pendiente" label="Estado"/>
+			    </c:when>     
+  			    <c:when test="${solicitudMBean.infEstEmp.estado eq 3}">
+			    	<h:outputText value="En Proceso" label="Estado"/>
+			    </c:when>
+   			    <c:when test="${solicitudMBean.infEstEmp.estado eq 4}">
+			    	<h:outputText value="Aprobada" label="Estado"/>
+			    </c:when>
+			    <c:when test="${solicitudMBean.infEstEmp.estado eq 5}">
+			    	<h:outputText value="Rechazada" label="Estado"/>
+			    </c:when>
+			    <c:when test="${solicitudMBean.infEstEmp.estado eq 6}">
+			    	<h:outputText value="Eliminada" label="Estado"/>
+			    </c:when>
+			    <c:when test="${solicitudMBean.infEstEmp.estado eq 7}">
+			    	<h:outputText value="Vencida" label="Estado"/>
+			    </c:when>
+			</c:choose>    	    
+    		</h:panelGrid>
+    		
+        </p:tab>
+        <!-- </c:if> -->
+        
+        
+        <p:tab title="Informe de Redes Sociales">
+        <h:outputText value="#{solicitudMBean.menInfRedSoc}" style="font-weight:bold;color:red;"/>
+            <h:panelGrid columns="2" cellpadding="10">
+            
+            <h:outputLabel value = "Código" style="font-weight:bold;"/>
+        	<h:outputText value="#{solicitudMBean.infRedSoc.codEvaRedSoc}"/>
+        	
+        	<h:outputLabel value = "Fecha" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{solicitudMBean.infRedSoc.fecha}">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</h:outputText>
+        	
+    		<h:outputLabel value = "Nivel de aceptación " style="font-weight:bold; margin-right:10px;"/>
+        	<h:outputText id="nivAce" value="#{solicitudMBean.infRedSoc.nivelAceptacion}"/>
+        	
+	    	<h:outputLabel value = "Comentario " style="font-weight:bold;margin-right:10px;"/>
+	        <h:outputText value="#{solicitudMBean.infRedSoc.comentario}" label="Comentarios"/>
+        
+    	    <h:outputLabel value = "Estado " style="font-weight:bold;margin-right:10px;"/>    	        	    
+    	    <c:choose>
+			    <c:when test="${solicitudMBean.infRedSoc.estado eq 1}">
+			    	<h:outputText value="Registrada" label="Estado"/>
+			    </c:when>			
+			    <c:when test="${solicitudMBean.infRedSoc.estado eq 2}">
+			    	<h:outputText value="Pendiente" label="Estado"/>
+			    </c:when>     
+  			    <c:when test="${solicitudMBean.infRedSoc.estado eq 3}">
+			    	<h:outputText value="En Proceso" label="Estado"/>
+			    </c:when>
+   			    <c:when test="${solicitudMBean.infRedSoc.estado eq 4}">
+			    	<h:outputText value="Aprobada" label="Estado"/>
+			    </c:when>
+			    <c:when test="${solicitudMBean.infRedSoc.estado eq 5}">
+			    	<h:outputText value="Rechazada" label="Estado"/>
+			    </c:when>
+			    <c:when test="${solicitudMBean.infRedSoc.estado eq 6}">
+			    	<h:outputText value="Eliminada" label="Estado"/>
+			    </c:when>
+			    <c:when test="${solicitudMBean.infRedSoc.estado eq 7}">
+			    	<h:outputText value="Vencida" label="Estado"/>
+			    </c:when>
+			</c:choose>
+    	    
+    	    </h:panelGrid>
+        </p:tab>
+              
+    </p:accordionPanel>
+    <p:commandButton value="Cerrar" action="#{solicitudMBean.cerrarConSol}" process="@this"/>
+</p:panel>
+</h:form>
+     		</div>
+         </div>
+    </div>
+</h:form>
+</h:body>
+</html>

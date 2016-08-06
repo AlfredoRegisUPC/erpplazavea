@@ -10,6 +10,8 @@
     xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Solicitudes de Alquiler de Espacio Comercial</title>
+    <h:outputScript library="primefaces" name="jquery/jquery.js" />
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />
     <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
@@ -35,6 +37,8 @@
 	
     <h:panelGrid columns="1" cellpadding="5" >
     <ul class="nav nav-sidebar">
+     <li><a href="#">Gestión de Góndolas</a></li>
+     <li><a href="#">Gestión de Recursos Humanos</a></li>
     <li class="active"><a href="#">Gestión de Terceros</a></li>
     
         <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="solicitudes" value="Solicitudes de Alquiler de Espacio Comercial"/>
@@ -44,9 +48,45 @@
 
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">Gestión de Terceros</h1>
+            <h1 class="page-header">Solicitudes de Alquiler de Espacio Comercial</h1>
             <div  class="main">
     <!-- <h:form id="formSol"> -->
+    
+    <p:panel id="solicitud" header="Solicitud" style="margin-bottom:20px" >
+
+        <h:panelGrid columns="4" cellpadding="5">
+       		
+       		<h:outputLabel for="popupIni" value = "Fec. Sol. Desde" style="font-weight:bold;margin-right:10px;"/>
+        	<p:calendar id="popupIni" value="#{solicitudMBean.solFecIni}" pattern="yyyy-MM-dd"  label="Desde">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</p:calendar> 
+        	<h:outputLabel for="popupFin" value = "Fec. Sol. Hasta" style="font-weight:bold;margin-right:10px;margin-left:20px;"/>
+        	<p:calendar id="popupFin" value="#{solicitudMBean.solFecFin}" pattern="yyyy-MM-dd"  label="Hasta">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</p:calendar> 
+        	
+        	<h:outputLabel value = "RUC " style="font-weight:bold;margin-left:10px;margin-top:10px;"/>
+        	<p:inputText label = "RUC" value="#{solicitudMBean.solRuc}"/>
+	    
+        	<h:outputLabel value = "Razón Social " style="font-weight:bold;margin-right:10px;margin-left:20px;margin-top:10px;"/>
+        	<p:inputText id="razon" label ="Razón Social" value="#{solicitudMBean.solRazSoc}" />
+        	
+        	<h:outputLabel value = "Estado " style="font-weight:bold;margin-left:10px;"/>
+        	 <p:selectOneMenu id="estado" value = "#{solicitudMBean.solEstado}"  label="Estado">
+        	 <f:selectItem itemLabel="" itemValue="" />
+        	 <f:selectItem itemLabel="Registrada" itemValue="Registrada" />
+        	 <f:selectItem itemLabel="Pendiente" itemValue="Pendiente" />
+        	 <f:selectItem itemLabel="En Proceso" itemValue="En Proceso" />
+            <f:selectItem itemLabel="Aprobada" itemValue="Aprobada" />
+            <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
+    	</p:selectOneMenu>
+
+		<p:commandButton  value="Buscar" action="#{solicitudMBean.getObtenerSolicitudes}" update=":formSol:myTable" style="font-weight:bold;margin-left:20px;">
+	    	</p:commandButton>
+	    
+        </h:panelGrid>
+    	</p:panel>
+    	
     <div align="right">
 <!--     <p:commandButton action="index" value="Menú"  icon="ui-icon-home"
         style="background-color:rgb(235, 235, 235);background-origin:padding-box; border-bottom-color:rgb(170, 170, 170); font-family:'Varela Round', sans-serif;
@@ -57,42 +97,42 @@
     </div>    
 	<p:panel id="basic" header="Lista de Solicitudes de Alquiler" style="margin-bottom:20px">
         <h:panelGrid columns="1" cellpadding="10">
-            <c:if test="${solicitudMBean.obtenerSolicitudes != 0}">
+            <!-- <c:if test="${solicitudMBean.obtenerSolicitudes != 0}"> -->
             	<p:dataTable id="myTable" var="sol" value="#{solicitudMBean.listaSolicitudes}" 
             	selection="#{solicitudMBean.solicitud}" emptyMessage="No existen solicitudes según los filtros ingresados">
 				    <p:ajax event="rowSelect" update=":formSol:myTable:selectRowBtn :formSol:message :formSol:myTable" listener="#{solicitudMBean.onRowSelect}" />
-				    <p:column headerText="Id">
-				        <h:outputText value="#{sol.idSolicitud}" />
+ 				    <p:column headerText="Código" style="width:150px"  sortBy="#{sol.codSolicitud}">
+				        <div style="text-align:center"><h:outputText value="#{sol.codSolicitud}"/></div>
 				    </p:column>
-				 
-				    <p:column id="fechaHeader" filterBy="#{sol.fecha}" sortBy="#{sol.fecha}">
+				  
+				    <p:column id="fechaHeader" style="width:100px" sortBy="#{sol.fecha}">
 				        <f:facet name="header">
                			 <h:outputText value="Fecha" />
             			</f:facet>
-				        <h:outputText value="#{sol.fecha}" />
+				        <div style="text-align:center"><h:outputText value="#{sol.fecha}" /></div>
 				    </p:column>
 				 
-				    <p:column id="rucHeader" filterBy="#{sol.locatario.ruc}" sortBy="#{sol.locatario.ruc}">
+				    <p:column id="rucHeader"  style="width:120px" sortBy="#{sol.locatario.ruc}">
 				        <f:facet name="header">
                			 <h:outputText value="RUC" />
             			</f:facet>
-				        <h:outputText value="#{sol.locatario.ruc}" />
+				        <div style="text-align:center"><h:outputText value="#{sol.locatario.ruc}" /></div>
 				    </p:column>
-				    <p:column id="razSocHeader" filterBy="#{sol.locatario.razonSocial}" sortBy="#{sol.locatario.razonSocial}">
+				    <p:column id="razSocHeader" sortBy="#{sol.locatario.razonSocial}">
 				        <f:facet name="header">
                			 <h:outputText value="Razón Social" />
             			</f:facet>
 				        <h:outputText value="#{sol.locatario.razonSocial}" />
 				    </p:column>
 				    
-				      <p:column id="estadoHeader" filterBy="#{sol.estado}" sortBy="#{sol.estado}">
+				      <p:column id="estadoHeader" style="width:120px"  sortBy="#{sol.estado}">
 				        <f:facet name="header">
                			 <h:outputText value="Estado" />
             			</f:facet>
-				        <h:outputText value="#{sol.estado}" />
+				         <div style="text-align:center"><h:outputText value="#{sol.estado}" /></div>
 				    </p:column>
 				    
-				      <p:column style="text-align: center">
+				      <p:column style="text-align: center;width:80px" >
 				       <f:facet name="header">
                			 <h:outputText value="Evaluar" />
             			</f:facet>
@@ -103,9 +143,18 @@
 				        </p:commandButton>
 				      </p:column>
 				     
+				     <p:column style="text-align: center;width:90px">
+				       <f:facet name="header">
+               			 <h:outputText value="Consultar" />
+            			</f:facet>
+				        <p:commandButton id="selectSol" icon="ui-icon-search" style="text-align: center" process="@this"  immediate="true"
+				        actionListener="#{solicitudMBean.showSolicitud}" action="#{solicitudMBean.goConsSol}">
+				        <f:attribute name="sol" value="#{sol}"/>
+				        </p:commandButton>
+				      </p:column>
 				      
 				</p:dataTable>
-            </c:if>
+           <!--  </c:if> -->
         </h:panelGrid>
     </p:panel>
     
@@ -118,9 +167,9 @@
     </h:form>
     <br/>
     
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!--         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
 </h:body>
 </html>

@@ -1,16 +1,19 @@
 package pe.upc.edu.alquiler.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Type;
 
 /**
  * CREATE TABLE `plazaveadb`.`local` (
@@ -45,6 +48,9 @@ public class Requisito implements Serializable {
 	
 	@Column(name="vigencia")
 	private String vigencia;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.requisito", cascade=CascadeType.ALL)
+	private Set<EntregaDoc> entregaDoc = new HashSet<EntregaDoc>(0);
 
 	public Long getIdRequisito() {
 		return idRequisito;
@@ -77,6 +83,16 @@ public class Requisito implements Serializable {
 	public void setVigencia(String vigencia) {
 		this.vigencia = vigencia;
 	}
+
+	public Set<EntregaDoc> getEntregaDoc() {
+		return entregaDoc;
+	}
+
+	public void setEntregaDoc(Set<EntregaDoc> entregaDoc) {
+		this.entregaDoc = entregaDoc;
+	}
+
+
 
 	
 	

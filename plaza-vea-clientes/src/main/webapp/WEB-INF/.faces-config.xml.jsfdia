@@ -24,6 +24,14 @@
    <PROCESS-ITEM-OUTPUT ID="regEvaluacion::#regEvaluacion.xhtml"
     NAME="output6" PATH="/regEvaluacion.xhtml"
     TARGET="rules:#regEvaluacion.xhtml" TITLE="regEvaluacion" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="infEstEmp::#infEstEmp.xhtml" NAME="output7"
+    PATH="/infEstEmp.xhtml" TARGET="rules:#infEstEmp.xhtml"
+    TITLE="infEstEmp" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="infMerc::#infMerc.xhtml" NAME="output8"
+    PATH="/infMerc.xhtml" TARGET="rules:#infMerc.xhtml" TITLE="infMerc" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="conSolicitud::#conSolicitud.xhtml"
+    NAME="output9" PATH="/conSolicitud.xhtml"
+    TARGET="rules:#conSolicitud.xhtml" TITLE="conSolicitud" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#solicitud.xhtml" PATH="/solicitud.xhtml"
@@ -38,4 +46,10 @@
   PATH="/regEvaluacion.xhtml" SHAPE="512,545,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#solicitudes.xhtml" PATH="/solicitudes.xhtml"
   SHAPE="512,321,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#infEstEmp.xhtml" PATH="/infEstEmp.xhtml"
+  SHAPE="512,353,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#infMerc.xhtml" PATH="/infMerc.xhtml"
+  SHAPE="512,385,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#conSolicitud.xhtml"
+  PATH="/conSolicitud.xhtml" SHAPE="512,417,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

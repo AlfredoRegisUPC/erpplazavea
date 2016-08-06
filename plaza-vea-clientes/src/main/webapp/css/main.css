@@ -7,7 +7,8 @@ body {
 }
 
 .navbar-plazavea {
-    background: #ff0c2a;
+    /*background: #ff0c2a;*/
+    background: linear-gradient(45deg,#cd071c 28%,#cd071c 28%,#da081f 44%);
 }
 
 .brand-img {

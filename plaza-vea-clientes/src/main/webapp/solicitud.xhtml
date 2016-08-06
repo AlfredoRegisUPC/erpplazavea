@@ -10,9 +10,12 @@
     xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Registrar Solicitud de Alquiler de Espacio Comercial</title>
-
+    <h:outputScript library="primefaces" name="jquery/jquery.js" />
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/main.css"/>      
  <script language="javascript">
-
   //<![CDATA[ 
 function soloNumeros(e){
 
@@ -25,6 +28,30 @@ function soloNumeros(e){
 </script>
 </h:head>
 <h:body>
+<nav class="navbar navbar-plazavea navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <p:graphicImage class="navbar-brand" value="/resources/images/plazavea.png" width="200" height="100"  />
+        </div>
+    </div>
+</nav>
+<h:form id="form">   
+    <div class="container-fuild">
+    	<div class="row">
+    		<div class="col-sm-3 col-md-2 sidebar">
+    
+			    <h:panelGrid columns="1" cellpadding="5" >
+					<ul class="nav nav-sidebar">
+					 <li><a href="#">Gestión de Góndolas</a></li>
+					 <li><a href="#">Gestión de Recursos Humanos</a></li>
+					 <li class="active"><a href="#">Gestión de Terceros</a></li>					
+					    <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="solicitudes" value="Solicitudes de Alquiler de Espacio Comercial"/>
+						<h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="evaluaciones" value="Evaluaciones de Solicitudes de Alquiler de Espacio Comercial" />
+					</ul>
+			    </h:panelGrid>
+
+    		</div>
+    		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"> 
 <h:form id="formSolicitud"> 
 	<p:panel id="regSolAlq" header="Registrar Solicitud de Alquiler" style="margin-bottom:20px">
         <p:panel id="locatario" header="Locatario" style="margin-bottom:20px" >
@@ -42,7 +69,7 @@ function soloNumeros(e){
  			<f:convertNumber integerOnly="true" pattern="#######"/>
 			<f:validateLength maximum="11" minimum="11"/>   
 			<p:clientValidator event="keyup"/>      	
-    		<p:ajax event="blur" update=":formSolicitud:locatario" listener="#{solicitudMBean.getObtenerLocatario}"/>
+    		<p:ajax event="blur" update=":form:formSolicitud:locatario" listener="#{solicitudMBean.getObtenerLocatario}"/>
 			</p:inputText>
         	<h:outputLabel value = "Razón Social "/>
         	<p:inputText id="razon" label ="Razón Social" value="#{solicitudMBean.locatario.razonSocial}" required="true" />
@@ -63,11 +90,24 @@ function soloNumeros(e){
         	<f:validateRegex
 			pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
         	</p:inputText>
+        	
+        	<h:outputLabel value = "Facebook" />
+        	<p:inputText id="facebook" value="#{solicitudMBean.locatario.facebook}"   />
+        	
+        	<h:outputLabel value = "Twitter" />
+        	<p:inputText id="twitter" value="#{solicitudMBean.locatario.twitter}"   />
+        	
+        	<h:outputLabel value = "Instagram" />
+        	<p:inputText id="instagram" value="#{solicitudMBean.locatario.instagram}"   />
+        	
+        	<h:outputLabel value = "Siglas" />
+        	<p:inputText id="siglas" value="#{solicitudMBean.locatario.siglas}"   />
+        	
         </h:panelGrid>
     	</p:panel>
     	
     	<p:panel id="locacion" header="Locación" style="margin-bottom:20px" >
-		<h:panelGrid columns="2" cellpadding="5" columnClasses="label, value">
+		<h:panelGrid columns="2" cellpadding="5" >
     	<h:outputLabel value = "Local "/>
     	<p:selectOneListbox id="local" value="#{locacionMBean.local}" converter="localConverter" required="true" label="Local"
     		var="t" filter="true" filterMatchMode="contains" style="width: 500px;">
@@ -76,28 +116,31 @@ function soloNumeros(e){
             <p:column>
                 <h:outputText value="#{t.nombre}" />
             </p:column>
-            <p:ajax process="@this" event="change" update=":formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
+            <p:ajax process="@this" event="change" update=":form:formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
         </p:selectOneListbox>
+        <h:outputLabel value="" escape="false" style="width:100px"/><h:outputLabel value="" escape="false" style="width:100px"/>
         </h:panelGrid>
 
-        <h:panelGrid id="tipoUbi" columns="4" cellpadding="5" columnClasses="label, value">
-    	<h:outputLabel value = "Tamaño "/>
-    	<p:selectOneListbox id="tipo" value = "#{locacionMBean.tipo}" required="true" label="Tamaño">
+        <h:panelGrid id="tipoUbi" columns="5" cellpadding="5" >
+    	<h:outputLabel value = "Tamaño " style="width:80px"/>
+    	<p:selectOneMenu id="tipo" value = "#{locacionMBean.tipo}" required="true" label="Tamaño" style="width:120px">
             <f:selectItem itemLabel="Grande" itemValue="Grande" />
             <f:selectItem itemLabel="Mediano" itemValue="Mediano" />
             <f:selectItem itemLabel="Pequeño" itemValue="Pequeño" />
-            <p:ajax process="@this" event="change" update=":formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
-    	</p:selectOneListbox>
-    	<h:outputLabel value = "Ubicación "/>
-    	<p:selectOneListbox id="ubicacion" value = "#{locacionMBean.ubicacion}" required="true" label="Ubicación">
+            <p:ajax process="@this" event="change" update=":form:formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
+    	</p:selectOneMenu>
+    	<h:outputLabel value="" escape="false" style="width:100px"/>
+    	<h:outputLabel value = "Ubicación " style="width:80px"/>
+    	<p:selectOneMenu id="ubicacion" value = "#{locacionMBean.ubicacion}" required="true" label="Ubicación" style="width:120px">
     	<f:selectItem itemLabel="Entrada" itemValue="Entrada"/>
     	<f:selectItem itemLabel="Centro" itemValue="Centro" />
     	<f:selectItem itemLabel="Salida" itemValue="Salida" />
-    	<p:ajax process="@this"  event="change" update=":formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
-    	</p:selectOneListbox>
+    	<p:ajax process="@this"  event="change" update=":form:formSolicitud:locSelect" listener="#{locacionMBean.getObtenerLocaciones}"/>
+    	</p:selectOneMenu>
     	</h:panelGrid>
     	
     	<h:panelGrid id="locSelect" columns="3" cellpadding="10">
+    	<h:outputLabel value="" escape="false" style="width:100px"/><h:outputLabel value="" escape="false" style="width:100px"/><h:outputLabel value="" escape="false" style="width:100px"/>
     	<h:outputLabel value = "Locación "/>
     	<p:selectOneListbox id="locacionSelect" value="#{solicitudMBean.locacion}" required="true" label="Locación"
 			converter="locacionConverter"
@@ -125,17 +168,22 @@ function soloNumeros(e){
 
     	<p:panel id="requisitos" header="Requisitos" style="margin-bottom:20px" >
 		<h:selectManyCheckbox value = "#{solicitudMBean.selectedRequisitos}" required="true" requiredMessage="Debe seleccionar toda la documentación requerida."
-   		validatorMessage="#{msg.REQUIRED}">
+   		validatorMessage="#{msg.REQUIRED}" >
+   		<f:converter converterId="reqConverter"/>
 		<f:selectItems value = "#{requisitoMBean.listaRequisitos}" var = "r"
-		itemLabel = "#{r.detalle}" itemValue="#{r.idRequisito}"/>
+		itemLabel = "#{r.detalle}" itemValue="#{r}" />
 		</h:selectManyCheckbox>
     	</p:panel>
 
-    	<h:outputLabel value = "Solicitante "/>
-        <p:inputText  required="true" label="Solicitante" style="width: 500px;"/>
+		<h:panelGrid columns="2" cellpadding="10" >
+			<h:outputLabel value="" escape="false" style="width:100px"/><h:outputLabel value="" escape="false" style="width:100px"/>		
+	    	<h:outputLabel value = "Solicitante "/>
+	        <p:inputText  required="true" label="Solicitante" style="width: 500px;"/>
+	        <h:outputLabel value="" escape="false" style="width:100px"/><h:outputLabel value="" escape="false" style="width:100px"/>
+        </h:panelGrid>
         
         <h:panelGrid columns="4" cellpadding="10" >
-	    <p:growl id="message" showDetail="true" autoUpdate="true" life="1500"/>
+	    <p:growl id="message" showDetail="true" autoUpdate="true" life="8500"/>
 	 
 	    <p:commandButton value="Registrar" action="#{solicitudMBean.registraSolicitud}" update="message">
 	        <p:confirm header="Confirmación" message="Seguro que desea registrar la solicitud?" icon="ui-icon-alert" />
@@ -154,6 +202,10 @@ function soloNumeros(e){
     	</h:panelGrid>
     	
     </p:panel>
-    </h:form>
+</h:form>
+     		</div>
+         </div>
+    </div>
+</h:form>
 </h:body>
 </html>

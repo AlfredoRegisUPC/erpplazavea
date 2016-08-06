@@ -1,13 +1,15 @@
 package pe.upc.edu.alquiler.model;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -25,6 +27,11 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name="entregaDoc")
+@AssociationOverrides({
+	@AssociationOverride(name = "solicitud", 
+		joinColumns = @JoinColumn(name = "idSolicitud")),
+	@AssociationOverride(name = "requisito", 
+		joinColumns = @JoinColumn(name = "idRequisito")) })
 public class EntregaDoc implements Serializable {
 
 	/**
@@ -32,16 +39,25 @@ public class EntregaDoc implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Id
+/*	@Id
     @Column(name="idEntregaDoc")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idEntregaDoc;
 	
     @Column(name="idRequisito")
 	private Long idRequisito;
+	@ManyToOne
+    @JoinColumn(name = "idRequisito")
+	private Requisito requisito;
 	
 	@Column(name="idSolicitud")
 	private String idSolicitud;
+    @ManyToOne
+    @JoinColumn(name = "idSolicitud")
+	private Solicitud solicitud;*/
+	
+	@EmbeddedId
+	private SolReqId pk = new SolReqId();
 	
 	@Column(name="fechaEntrega")
 	@Type(type="date")
@@ -51,32 +67,33 @@ public class EntregaDoc implements Serializable {
 	private String estado;
 	
 	
+	public SolReqId getPk() {
+		return pk;
+	}
+
+	public void setPk(SolReqId pk) {
+		this.pk = pk;
+	}
+
 	
-
-	public Long getIdEntregaDoc() {
-		return idEntregaDoc;
+	@Transient
+	public Solicitud getSolicitud() {
+		return getPk().getSolicitud();
 	}
 
-	public void setIdEntregaDoc(Long idEntregaDoc) {
-		this.idEntregaDoc = idEntregaDoc;
+	public void setSolicitud(Solicitud solicitud) {
+		getPk().setSolicitud(solicitud);
 	}
 
-	public Long getIdRequisito() {
-		return idRequisito;
+	@Transient
+	public Requisito getRequisito() {
+		return getPk().getRequisito();
 	}
 
-	public void setIdRequisito(Long idRequisito) {
-		this.idRequisito = idRequisito;
+	public void setRequisito(Requisito requisito) {
+		getPk().setRequisito(requisito);
 	}
-
-	public String getIdSolicitud() {
-		return idSolicitud;
-	}
-
-	public void setIdSolicitud(String idSolicitud) {
-		this.idSolicitud = idSolicitud;
-	}
-
+	
 	public Date getFechaEntrega() {
 		return fechaEntrega;
 	}

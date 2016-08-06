@@ -2,13 +2,16 @@ package pe.upc.edu.alquiler.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import pe.upc.edu.alquiler.model.Colaborador;
 import pe.upc.edu.alquiler.model.EntregaDoc;
 import pe.upc.edu.alquiler.model.Evaluacion;
+import pe.upc.edu.alquiler.model.EvaluacionEmpresarial;
+import pe.upc.edu.alquiler.model.EvaluacionRedSocial;
 import pe.upc.edu.alquiler.model.Evaluador;
 import pe.upc.edu.alquiler.model.InfEstEmp;
-import pe.upc.edu.alquiler.model.InfEvalMerc;
+import pe.upc.edu.alquiler.model.InfRedSoc;
 import pe.upc.edu.alquiler.model.InfSanciones;
 import pe.upc.edu.alquiler.model.Locacion;
 import pe.upc.edu.alquiler.model.Locatario;
@@ -32,6 +35,8 @@ public interface AlquilerService {
 	
 	public List<Evaluacion> listarEvaluaciones() throws Exception;
 	
+	public List<Evaluacion> listarEvaluacionesVencidas() throws Exception;
+	
 	public Integer registrarEvaluacion(Evaluacion evaluacion) throws Exception;
 	
 	public Integer actualizarEvaluacion(Evaluacion evaluacion) throws Exception;
@@ -40,13 +45,15 @@ public interface AlquilerService {
 	
 	public Evaluacion obtenerEvaluacion(long idEvaluacion) throws Exception;
 	
+	public Evaluacion obtenerEvaluacionSol(long idSolicitud) throws Exception;
+	
 	public Evaluador evaluadorDisponible() throws Exception;
 	
 	public Integer actualizarEvaluador(long idEvaluador, String estado, Date fechaProp, Integer cantEva) throws Exception;
 	
 	public InfEstEmp obtenerInfEstEmp(long idEvaluacion) throws Exception;
 	
-	public InfEvalMerc obtenerInfEvalMerc(long idEvaluacion) throws Exception;
+	public InfRedSoc obtenerInfEvalMerc(long idEvaluacion) throws Exception;
 	
 	public InfSanciones obtenerInfSanciones(long idEvaluacion) throws Exception;
 	
@@ -57,4 +64,26 @@ public interface AlquilerService {
 	public Integer actualizarSolicitud(long idSolicitud, String estado) throws Exception;
 	
 	public List<Evaluador> listarEvaluadores() throws Exception;
+	
+	public List<Solicitud> listarSolicitudesFiltro(String ruc, String razonSocial, Date fecSolIni, Date fecSolFin, String estado) throws Exception;
+	
+	public List<Evaluacion> listarEvaluacionesFiltro(String ruc, String razonSocial, Date fecEvalIni, Date fecEvalFin,  String estado) throws Exception;
+	
+	public Integer registrarInfEstEmp(InfEstEmp infEstEmp) throws Exception;
+	
+	public Integer registrarInfRedSoc(InfRedSoc infRedSoc) throws Exception;
+	
+	public Integer actualizarEstadoEvaluacion(long idEvaluacion, long idSolicitud,String estado) throws Exception;
+	
+	public EvaluacionEmpresarial calcularEvaluacionEmpresarial(long idEvaluacion) throws Exception;
+	
+	public EvaluacionEmpresarial obtenerEvaluacionEmpresarial(long idEvaluacion) throws Exception;
+	
+	public Integer registrarEvaluacionEmpresarial(EvaluacionEmpresarial evaEmpresarial) throws Exception;
+	
+	public Integer registrarEvaluacionRedSocial(EvaluacionRedSocial evaRedSocial) throws Exception;
+	
+	public EvaluacionRedSocial calcularScore(long idEvalucion, Map<Double,Object> map) throws Exception;
+	
+	public EvaluacionRedSocial obtenerEvaluacionRedSocial(long idEvaluacion) throws Exception;
 }

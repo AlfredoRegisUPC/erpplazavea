@@ -2,15 +2,22 @@ package pe.upc.edu.alquiler.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+
+import pe.upc.edu.cliente.model.Local;
 
 /**
  * CREATE TABLE `plazaveadb`.`local` (
@@ -37,8 +44,8 @@ public class Locacion implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idLocacion;
 	
-	@Column(name="idLocal")
-	private Long idLocal;
+	/*@Column(name="idLocal")
+	private Long idLocal;*/
 	
 	@Column(name="dimensiones")
 	private String dimensiones;
@@ -51,6 +58,13 @@ public class Locacion implements Serializable {
 	
 	@Column(name="estado")
 	private String estado;
+	
+	@ManyToOne
+    @JoinColumn(name = "idLocal")
+	private Local local;
+	
+	@OneToMany(mappedBy = "locacion", cascade = CascadeType.ALL)
+	private Set<Solicitud> solicitudes;
 
 	public Long getIdLocacion() {
 		return idLocacion;
@@ -92,13 +106,22 @@ public class Locacion implements Serializable {
 		this.estado = estado;
 	}
 
-	public Long getIdLocal() {
-		return idLocal;
+	public Local getLocal() {
+		return local;
 	}
 
-	public void setIdLocal(Long idLocal) {
-		this.idLocal = idLocal;
+	public void setLocal(Local local) {
+		this.local = local;
 	}
-	
+
+	public Set<Solicitud> getSolicitudes() {
+		return solicitudes;
+	}
+
+	public void setSolicitudes(Set<Solicitud> solicitudes) {
+		this.solicitudes = solicitudes;
+	}
+
+
 	
 }

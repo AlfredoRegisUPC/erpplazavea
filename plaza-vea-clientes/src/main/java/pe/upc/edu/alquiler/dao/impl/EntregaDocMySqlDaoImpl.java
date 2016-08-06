@@ -26,17 +26,17 @@ public class EntregaDocMySqlDaoImpl extends AbstractDao implements EntregaDocDao
 				return rowsAffected;
 		*/
 		
-		Query query = getSession().createQuery("select max(idEntregaDoc) from EntregaDoc");
+/*		Query query = getSession().createQuery("select max(idEntregaDoc) from EntregaDoc");
 		Integer idEntregaDoc = 1;
 		
 		if(query.uniqueResult() != null)
 			idEntregaDoc = Integer.parseInt(query.uniqueResult().toString())+1;
         
-        requisito.setIdEntregaDoc((long)idEntregaDoc);
+        requisito.setIdEntregaDoc((long)idEntregaDoc);*/
 
         getSession().save(requisito);
 		
-		return idEntregaDoc;
+		return 1;
 		
 
 	}

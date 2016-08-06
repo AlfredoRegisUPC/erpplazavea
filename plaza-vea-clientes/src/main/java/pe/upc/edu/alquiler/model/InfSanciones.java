@@ -3,11 +3,15 @@ package pe.upc.edu.alquiler.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -37,8 +41,12 @@ public class InfSanciones implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idInfSanciones;
 	
-	@Column(name="idEvaluacion")
-	private Long idEvaluacion;
+	//@Column(name="idEvaluacion")
+	//private Long idEvaluacion;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idEvaluacion")
+	private Evaluacion evaluacion;
+	
 	
 	@Column(name="antBancario")
 	private String antBancario;
@@ -73,15 +81,7 @@ public class InfSanciones implements Serializable {
 	public void setIdInfSanciones(Long idInfSanciones) {
 		this.idInfSanciones = idInfSanciones;
 	}
-
-	public Long getIdEvaluacion() {
-		return idEvaluacion;
-	}
-
-	public void setIdEvaluacion(Long idEvaluacion) {
-		this.idEvaluacion = idEvaluacion;
-	}
-
+	
 	public String getAntBancario() {
 		return antBancario;
 	}
@@ -144,6 +144,14 @@ public class InfSanciones implements Serializable {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public Evaluacion getEvaluacion() {
+		return evaluacion;
+	}
+
+	public void setEvaluacion(Evaluacion evaluacion) {
+		this.evaluacion = evaluacion;
 	}
 
 	

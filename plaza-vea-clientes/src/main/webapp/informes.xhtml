@@ -17,53 +17,46 @@
             <h:panelGrid columns="2" cellpadding="10">
                 <p:graphicImage value="/resources/images/sunat.jpeg" />
                 <h:panelGrid columns="2" cellpadding="5">
-       		
-	    		<h:outputLabel value = "Estado de contribuyente " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEstEmp.estadoContri}"/>
-        		<h:outputLabel value = "Actividad Económica Principal " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEstEmp.actEconPrin}"/>
-	    		<h:outputLabel value = "Omisiones Tributarias " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEstEmp.omisiones}"/>
-        		<h:outputLabel value = "Fecha de Informe " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEstEmp.fecha}"/>
-        		<h:outputLabel value = "Observaciones " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEstEmp.comentario}"/>
-        		<h:outputLabel value = "Estado de Informe " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEstEmp.estado}"/>
-        		
+       	
+            
+            <h:outputLabel value = "Código" style="font-weight:bold;"/>
+        	<h:outputText value="#{informesMBean.infEstEmp.codInfEstEmp}"/>
+        	
+        	<h:outputLabel value = "Fecha" style="font-weight:bold;"/>
+        	<h:outputText value="#{solicitudMBean.infEstEmp.fecha}"/>
+        	
+    		<h:outputLabel value = "Resultado de Evaluación " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="resEval" value="#{informesMBean.infEstEmp.resultado}"/>
+    		
+	    	<h:outputLabel value = "Comentarios " style="font-weight:bold;margin-right:10px;"/>
+	        <h:outputText value="#{informesMBean.infEstEmp.comentario}" label="Comentarios"/>
+        
+    	    <h:outputLabel value = "Estado " style="font-weight:bold;margin-right:10px;"/>
+    	    <h:outputText id="estEval" value = "#{informesMBean.infEstEmp.estado}"/>
+
         		</h:panelGrid>
             </h:panelGrid>
         </p:tab>
-        <p:tab title="Informe de Sanciones">
-            <h:panelGrid columns="2" cellpadding="10">
-                <p:graphicImage value="/resources/images/sbs.jpeg" />
-                <h:panelGrid columns="2" cellpadding="5">
-       		
-	    		<h:outputLabel value = "Antecedentes Bancarios " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infSanciones.antBancario}"/>
-        		<h:outputLabel value = "Monto de Deuda " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infSanciones.montoDeuda}"/>
-        		<h:outputLabel value = "Fecha de Informe " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infSanciones.fecha}"/>
-        		<h:outputLabel value = "Observaciones " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infSanciones.comentario}"/>
-        		<h:outputLabel value = "Estado de Informe " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infSanciones.estado}"/>
-        		
-        		</h:panelGrid>
-            </h:panelGrid>
-        </p:tab>
-        <p:tab title="Informe de Evaluación de Mercado">
+        
+        <p:tab title="Informe de Redes Sociales">
             <h:panelGrid columns="2" cellpadding="10">
                 <p:graphicImage value="/resources/images/redesSociales.png" />
                 <h:panelGrid columns="2" cellpadding="5">
        		
-        		<h:outputLabel value = "Fecha de Informe " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEvalMerc.fecha}"/>
-        		<h:outputLabel value = "Observaciones " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEvalMerc.comentario}"/>
-        		<h:outputLabel value = "Estado de Informe " style="font-weight:bold;"/>
-        		<p:outputLabel value="#{informesMBean.infEvalMerc.estado}"/>
+        	<h:outputLabel value = "Código" style="font-weight:bold;"/>
+        	<h:outputText value="#{solicitudMBean.infRedSoc.codInfRedSoc}"/>
+        	
+        	<h:outputLabel value = "Fecha" style="font-weight:bold;"/>
+        	<h:outputText value="#{solicitudMBean.infRedSoc.fecha}"/>
+        	
+    		<h:outputLabel value = "Nivel de aceptación " style="font-weight:bold; margin-right:10px;"/>
+        	<h:outputText id="nivAce" value="#{solicitudMBean.infRedSoc.tipoRecep}"/>
+        	
+	    	<h:outputLabel value = "Comentarios " style="font-weight:bold;margin-right:10px;"/>
+	        <h:outputText value="#{solicitudMBean.infRedSoc.comentario}" label="Comentarios"/>
+        
+    	    <h:outputLabel value = "Estado " style="font-weight:bold;margin-right:10px;"/>
+    	    <h:outputText value="#{solicitudMBean.infRedSoc.estado}" label="Estado"/>
         		
         		</h:panelGrid>
             </h:panelGrid>

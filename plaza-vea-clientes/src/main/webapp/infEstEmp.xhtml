@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core" 
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Informe de Estado Empresarial</title>
+   	<h:outputScript library="primefaces" name="jquery/jquery.js" />
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />
+    <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="css/main.css"/>
+</h:head>
+<h:body>
+<nav class="navbar navbar-plazavea navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+           <!--  <a class="navbar-brand" href="#">
+                <img class="brand-img" src="//plazavea.vteximg.com.br/arquivos/logo-plazavea.png" alt="Plaza Vea">
+            </a> -->
+            <p:graphicImage class="navbar-brand" value="/resources/images/plazavea.png" width="200" height="100"  />
+        </div>
+    </div>
+</nav>
+<h:form id="form">   
+    <div class="container-fuild">
+    	<div class="row">
+    		<div class="col-sm-3 col-md-2 sidebar">
+    
+			    <h:panelGrid columns="1" cellpadding="5" >
+					<ul class="nav nav-sidebar">
+					 <li><a href="#">Gestión de Góndolas</a></li>
+					 <li><a href="#">Gestión de Recursos Humanos</a></li>
+					 <li class="active"><a href="#">Gestión de Terceros</a></li>					
+					    <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="solicitudes" value="Solicitudes de Alquiler de Espacio Comercial"/>
+						<h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="evaluaciones" value="Evaluaciones de Solicitudes de Alquiler de Espacio Comercial" />
+					</ul>
+			    </h:panelGrid>
+
+    		</div>
+    		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">  
+    		      	
+ <h:form id="formInfEstEmp">
+	<p:panel id="regInfEstEmp" header="Registrar Informe de Estado Empresarial" style="margin-bottom:20px">
+        <p:panel id="evaluacion" header="Evaluación Solicitud de Alquiler" style="margin-bottom:20px" >
+        <!--<h:panelGrid columns="4" cellpadding="5" style="margin-bottom:20px;border: black solid 2px">-->
+        <h:panelGrid columns="4" cellpadding="5" style="margin-bottom:20px">
+			<h:outputLabel value = "Código  " style="font-weight:bold;margin-right:10px;"/>
+	        <h:panelGroup style="width:200px"><h:outputText value="#{evaluacionEmpresarialMBean.evaluacion.solicitud.codSolicitud}"/></h:panelGroup>
+	         
+	        <h:outputLabel value = "Fecha Límite " style="font-weight:bold;margin-right:10px;"/>
+	        <h:outputText value="#{evaluacionEmpresarialMBean.evaluacion.fechaProp}">
+	        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+	        </h:outputText>
+	            
+	        <h:outputLabel value = "RUC " style="font-weight:bold;margin-right:10px;"/>
+	        <h:panelGroup style="width:200px"><h:outputText value="#{evaluacionEmpresarialMBean.evaluacion.solicitud.locatario.ruc}"/></h:panelGroup>
+	   
+	        <h:outputLabel value = "Razón Social " style="font-weight:bold;margin-right:10px;"/>
+	        <h:outputText value="#{evaluacionEmpresarialMBean.evaluacion.solicitud.locatario.razonSocial}"/>
+	         
+	 
+	        <h:outputLabel value = "Local" style="font-weight:bold;margin-right:10px;"/>
+	      	<h:panelGroup style="diplay: inline-block; width: 200px;"><h:outputText id="locNom" value="#{evaluacionEmpresarialMBean.evaluacion.solicitud.locacion.local.nombre}"/></h:panelGroup>
+	      
+	      	<h:outputLabel value = "Tamaño" style="font-weight:bold;margin-right:10px;"/>
+	      	<h:outputText id="locTam" value="#{evaluacionEmpresarialMBean.evaluacion.solicitud.locacion.tipo}"/>
+	      
+	      	<h:outputLabel value = "Ubicación" style="font-weight:bold;margin-right:10px;"/>
+	      	<h:panelGroup style="width:200px"><h:outputText id="locCar" value="#{evaluacionEmpresarialMBean.evaluacion.solicitud.locacion.ubicacion}"/></h:panelGroup>
+	  
+	      	<h:outputLabel value = "Locación" style="font-weight:bold;margin-right:10px;"/>
+	      	<h:outputText id="locDir" value="#{evaluacionEmpresarialMBean.evaluacion.solicitud.locacion.local.direccion} - #{evaluacionEmpresarialMBean.evaluacion.solicitud.locacion.local.ubigeo.distrito} - #{evaluacionEmpresarialMBean.evaluacion.solicitud.locacion.local.ubigeo.provincia} - #{evaluacionEmpresarialMBean.evaluacion.solicitud.locacion.local.ubigeo.departamento}"/>
+        	
+        	<h:panelGroup style="display:block; text-align:right;width:130px">
+        		<h:outputLabel value = " "/>
+        	</h:panelGroup>
+        	
+        	<h:panelGroup style="width:200px"><h:outputLabel value = " "/></h:panelGroup>
+        	<h:outputLabel value = " "/>
+        	<h:panelGroup style="display:block; text-align:right">
+	        	<p:commandButton value="Consultar"  action="#{evaluacionEmpresarialMBean.getObtenerEvaluacionEmpresarial(evaluacionEmpresarialMBean.evaluacion.idEvaluacion)}" 
+	        	update=":form:formInfEstEmp:sunat :form:formInfEstEmp:infCre :form:formInfEstEmp:resEval" immediate="true" style="font-weight:bold;margin-left:50px;">
+	        		<!-- <f:param name="idEva" value="#{evaluacionEmpresarialMBean.evaluacion.idEvaluacion}" />  -->
+				</p:commandButton>
+   		    </h:panelGroup>
+        </h:panelGrid>
+    	</p:panel>
+   		
+    	<p:panel id="sunat" header="SUNAT" style="margin-bottom:20px;" >
+    	<h:outputText value="#{evaluacionEmpresarialMBean.menSunat}" style="font-weight:bold;color:red;"/>
+        <h:panelGrid columns="2" cellpadding="5">
+        	   
+        	<h:outputLabel value = "Actividad Económica " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{evaluacionEmpresarialMBean.evaEmpresarial.sunat.actividadEconomica}"/>
+
+        	<h:outputLabel value = "Tipo de Contribuyente" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{evaluacionEmpresarialMBean.evaEmpresarial.sunat.tipoContribuyente}" />
+
+        	<h:outputLabel value = "Condición" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{evaluacionEmpresarialMBean.evaEmpresarial.sunat.condicion}" />
+        	        	      
+			<h:outputLabel value = "Omisiones Tributarias " style="font-weight:bold;"/><h:outputText value="&lt;br/&gt;" escape="false" />			
+			</h:panelGrid>
+			<p:dataTable id="oblig" var="obl" value="#{evaluacionEmpresarialMBean.evaEmpresarial.sunat.detalleOmisiones}" emptyMessage="El contribuyente no tiene omisiones tributarias" style="width:500px;">
+				    
+				    <p:column id="perObl" style="width:100px;">
+				        <f:facet name="header">
+               			 <h:outputText value="Periodo" />
+            			</f:facet>
+				        <h:outputText value="#{obl.periodo}" />
+				    </p:column>		 
+				    <p:column id="omision" style="width:400px;">
+				        <f:facet name="header">
+               			 <h:outputText value="Omision" />
+            			</f:facet>
+				        <h:outputText value="#{obl.omisionDescripcion}" />				        				        
+				    </p:column>				    
+				</p:dataTable>						         
+    	</p:panel>
+    	
+    	<p:panel id="infCre" header="Información Crediticia" style="margin-bottom:20px" >
+    	<h:outputText value="#{evaluacionEmpresarialMBean.menInfocorp}" style="font-weight:bold;color:red;"/>
+        <h:panelGrid columns="5" cellpadding="5">
+        	   
+        	<h:outputLabel value = "Calificación " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{evaluacionEmpresarialMBean.evaEmpresarial.informacionCrediticia.calificacionAbr}" />
+        	<h:outputText value="#{evaluacionEmpresarialMBean.evaEmpresarial.informacionCrediticia.calificacion}"/>
+
+			<h:outputLabel value = "Score " style="font-weight:bold;margin-right:10px;margin-left:20px;"/>
+        	<h:outputText value="#{evaluacionEmpresarialMBean.evaEmpresarial.informacionCrediticia.score}">
+        	<f:convertNumber pattern="#,##0.00"/>
+        	</h:outputText>
+			<h:outputLabel value = "Deuda Acumulada" style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{evaluacionEmpresarialMBean.evaEmpresarial.informacionCrediticia.deudaAcumulada}" >
+        		<f:convertNumber pattern="¤#,##0.00" currencySymbol="S/." />
+		    </h:outputText>
+        </h:panelGrid>
+    	</p:panel>
+    	
+    	<h:panelGrid columns="2" cellpadding="5">
+    		<h:outputLabel value = "Resultado de Evaluación " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText id="resEval" value="#{evaluacionEmpresarialMBean.evaEmpresarial.resultado}"/>
+    		<h:outputText value="&lt;br/&gt;" escape="false" /><h:outputText value="&lt;br/&gt;" escape="false" />
+    		
+	    	<h:outputLabel value = "Comentario" style="font-weight:bold;margin-right:10px;"/>
+			<p:inputTextarea id="comentario" value="#{evaluacionEmpresarialMBean.evaEmpresarial.comentario}" label="Comentarios"/>
+		
+	        <h:outputLabel value = "Estado " style="font-weight:bold;margin-right:10px;"/>
+            <h:selectOneMenu id="estado" value="#{evaluacionEmpresarialMBean.evaEmpresarial.estado}" style="width:150px" required="true" label="Estado" >            	            	             
+                <f:selectItem itemLabel="Aprobado" itemValue="4" />
+                <f:selectItem itemLabel="Rechazado" itemValue="5" />  
+                <f:convertNumber integerOnly="true" />                            
+            </h:selectOneMenu>
+            
+    	</h:panelGrid>
+		</p:panel>
+		<h:panelGrid columns="4" cellpadding="10" style="horizontal-align:right;">
+	 
+	     <p:commandButton value="Grabar"  action="#{evaluacionEmpresarialMBean.registrarInfEstEmp}" update="message" immediate="true">
+	        <p:confirm header="Confirmación" message="Seguro que desea grabar el informe?" icon="ui-icon-alert" />
+	    </p:commandButton>
+		
+    	<p:commandButton value="Cancelar" action="#{infEstEmpMBean.cancelaRegInfEstEmp}" process="@this">
+    	 	<p:confirm header="Confirmación" message="Seguro que desea cancelar el registro del informe" icon="ui-icon-alert" />
+    	</p:commandButton>
+    	   	
+    	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	    </p:confirmDialog>
+	    
+	    <p:growl id="growl" showDetail="true" />
+	    <p:growl id="message" showDetail="true" autoUpdate="true" life="150000"/>
+    	
+    	</h:panelGrid>    	
+</h:form>        
+     		</div>
+         </div>
+    </div>
+</h:form>
+
+</h:body>
+</html>

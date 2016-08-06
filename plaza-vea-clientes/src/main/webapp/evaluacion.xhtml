@@ -11,8 +11,8 @@
 <h:head>
     <title>Actualizar Evaluación de Solicitud de Alquiler de Espacio Comercial</title>
         <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/> -->
     <link rel="stylesheet" href="css/main.css"/>
 </h:head>
 <h:body>
@@ -31,40 +31,63 @@
 	<p:panel id="actEvalSolAlq" header="Actualizar Evaluación de Solicitud de Alquiler" style="margin-bottom:20px">
         <p:panel id="evaluacion" header="Evaluación Solicitud de Alquiler" style="margin-bottom:20px" >
         <h:panelGrid columns="4" cellpadding="5">
-       		<h:outputLabel value = "ID Evaluación " style="font-weight:bold;"/>
-        	<h:outputText id="idEvaluacion" value="#{evaluacionMBean.evaluacion.idEvaluacion}" />
+       		<h:outputLabel value = "Código de Solicitud " style="font-weight:bold;"/>
+        	<h:outputText id="idEvaluacion" value="#{evaluacionMBean.evaluacion.solicitud.codSolicitud}" />
         	   
-        	<h:outputLabel value = "Fecha de Solicitud " style="font-weight:bold;"/>
+        	<h:outputLabel value = "Fecha de Solicitud " style="font-weight:bold;margin-left:10px;"/>
         	<h:outputText value="#{evaluacionMBean.evaluacion.solicitud.fecha}">
         	<f:convertDateTime pattern="yyyy-MM-dd"/>  
         	</h:outputText> 
         	
-        	<h:outputLabel value = "RUC " style="font-weight:bold;"/>
+        	<h:outputLabel value = "RUC " style="font-weight:bold;margin-right:10px;"/>
         	<h:outputText value="#{evaluacionMBean.evaluacion.solicitud.locatario.ruc}"/>
 
-			<h:outputLabel value = "Razón Social " style="font-weight:bold;"/>
+			<h:outputLabel value = "Razón Social " style="font-weight:bold;margin-left:10px;"/>
         	<h:outputText value="#{evaluacionMBean.evaluacion.solicitud.locatario.razonSocial}"/>
         	
-        	<h:outputLabel value = "Representante Legal " style="font-weight:bold;"/>
+        	<h:outputLabel value = "Representante Legal " style="font-weight:bold;margin-right:10px;"/>
         	<h:outputText value="#{evaluacionMBean.evaluacion.solicitud.locatario.representante}"/>
-	
-			<h:outputLabel value = "ID Evaluador " style="font-weight:bold;"/>
-        	<h:outputText value="#{evaluacionMBean.evaluacion.evaluador.idEvaluador}"/>
         	
-        	<h:outputLabel value = "Evaluador " style="font-weight:bold;"/>
-        	<h:outputText value="#{evaluacionMBean.evaluacion.evaluador.colaborador.nombres} #{evaluacionMBean.evaluacion.evaluador.colaborador.apellidos}"/>
-        	   
-        	<h:outputLabel value = "Fecha Propuesta " style="font-weight:bold;"/>
-        	<h:outputText value="#{evaluacionMBean.evaluacion.fechaProp}">
+        	<h:outputLabel value = "Fecha Límite " style="font-weight:bold;margin-left:10px;"/>
+        	<h:outputText id = "fecPro" value="#{evaluacionMBean.evaluacion.fechaProp}">
         	<f:convertDateTime pattern="yyyy-MM-dd"/>  
         	</h:outputText> 
-
-	    
-	    <h:outputLabel value = "Observación " style="font-weight:bold;"/>
-        <h:inputTextarea value="#{evaluacionMBean.evaluacion.observacion}" required="true" label="Observacion"/>
         	
-        <h:outputLabel value = "Estado " style="font-weight:bold;"/>
+        	<h:outputLabel value = "Evaluador " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputText value="#{evaluacionMBean.evaluacion.evaluador.colaborador.nombres} #{evaluacionMBean.evaluacion.evaluador.colaborador.apellidos}"/>
+        	
+        	<c:if test="#{evaluacionMBean.evaluacion.estado} == 'Vencida'">
+        	<p:selectOneListbox id="evaluadorSelect" value="#{evaluacionMBean.evaluador}" required="true" label="Evaluador"
+			converter="evaluadorConverter"	
+    		var="o" filter="true" filterMatchMode="contains" style="width: 300px;" >
+            <p:ajax process="@this"  event="change" update=":formEvaluacion:fecPro" listener="#{evaluacionMBean.getObtenerFecPro}"/>
+            <f:selectItems value="#{evaluacionMBean.listaEvaluadores}" var="eva" 
+            itemLabel="#{eva.colaborador.apellidos}" itemValue="#{eva}" id="evaluadores"/>
+            <p:column>
+                <h:outputText value="#{o.colaborador.nombres}" />
+            </p:column>
+            <p:column>
+                <h:outputText value="#{o.colaborador.apellidos}" />
+            </p:column>
+               <p:column>
+                <h:outputText value="#{o.cantidadEval}" />
+            </p:column>
+       	 	</p:selectOneListbox>
+       	 	
+       	 	<h:outputLabel value = " " style="font-weight:bold;"/>
+       		</c:if>
+       	
+
+        	
+	    <h:outputLabel value = "Observación " style="font-weight:bold;"/>
+        <h:inputTextarea value="#{evaluacionMBean.evaluacion.observacion}" label="Observacion"/>
+        
+        	<h:outputLabel value = " " style="font-weight:bold;"/>
+        		<h:outputLabel value = " " style="font-weight:bold;"/>
+        	
+        <h:outputLabel value = "Estado " style="font-weight:bold;margin-left:10px;"/>
         <p:selectOneListbox id="estado" value = "#{evaluacionMBean.evaluacion.estado}" required="true" label="Estado">
+        	<f:selectItem itemLabel="Registrada" itemValue="Registrada" />
             <f:selectItem itemLabel="Aprobada" itemValue="Aprobada" />
             <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
     	</p:selectOneListbox>
@@ -101,9 +124,9 @@
 
     </p:panel>
 </h:form>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
 </h:body>
 </html>

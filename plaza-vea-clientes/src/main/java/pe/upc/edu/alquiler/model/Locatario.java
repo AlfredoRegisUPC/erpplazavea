@@ -61,6 +61,18 @@ public class Locatario implements Serializable {
 	@Column(name="correo")
 	private String correo;
 	
+	@Column(name="facebook")
+	private String facebook;
+	
+	@Column(name="twitter")
+	private String twitter;
+	
+	@Column(name="instagram")
+	private String instagram;
+	
+	@Column(name="siglas",length=6)
+	private String siglas;
+	
 	@OneToMany(mappedBy = "locatario", cascade = CascadeType.ALL)
 	private Set<Solicitud> solicitudes;
 
@@ -127,6 +139,39 @@ public class Locatario implements Serializable {
 	public void setSolicitudes(Set<Solicitud> solicitudes) {
 		this.solicitudes = solicitudes;
 	}
+
+	public String getFacebook() {
+		return facebook;
+	}
+
+	public void setFacebook(String facebook) {
+		this.facebook = facebook;
+	}
+
+	public String getTwitter() {
+		return twitter;
+	}
+
+	public void setTwitter(String twitter) {
+		this.twitter = twitter;
+	}
+
+	public String getInstagram() {
+		return instagram;
+	}
+
+	public void setInstagram(String instagram) {
+		this.instagram = instagram;
+	}
+
+	public String getSiglas() {
+		return siglas;
+	}
+
+	public void setSiglas(String siglas) {
+		this.siglas = siglas;
+	}
+	
 	
 	
 	

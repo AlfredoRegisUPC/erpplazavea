@@ -10,6 +10,8 @@
     xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Registrar Evaluación de Solicitud de Alquiler de Espacio Comercial</title>
+    <h:outputScript library="primefaces" name="jquery/jquery.js" />
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />
         <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
@@ -26,42 +28,66 @@
         </div>
     </div>
 </nav>
+<h:form id="form">   
+    <div class="container-fuild">
+    	<div class="row">
+    		<div class="col-sm-3 col-md-2 sidebar">
     
+			    <h:panelGrid columns="1" cellpadding="5" >
+					<ul class="nav nav-sidebar">
+					 <li><a href="#">Gestión de Góndolas</a></li>
+					 <li><a href="#">Gestión de Recursos Humanos</a></li>
+					 <li class="active"><a href="#">Gestión de Terceros</a></li>					
+					    <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="solicitudes" value="Solicitudes de Alquiler de Espacio Comercial"/>
+						<h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="evaluaciones" value="Evaluaciones de Solicitudes de Alquiler de Espacio Comercial" />
+					</ul>
+			    </h:panelGrid>
+
+    		</div>
+    		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">      
  <h:form id="formRegEval">
 	<p:panel id="regEvalSolAlq" header="Registrar Evaluación de Solicitud de Alquiler" style="margin-bottom:20px">
         <p:panel id="solicitud" header="Solicitud de Alquiler" style="margin-bottom:20px" >
-        <h:panelGrid columns="4" cellpadding="5">
-       		<h:outputLabel value = "ID Solicitud " style="font-weight:bold;"/>
-        	<h:outputText id="idSolicitud" value="#{evaluacionMBean.solicitud.idSolicitud}" />
-        	   
-        	<h:outputLabel value = "Fecha de Solicitud " style="font-weight:bold;"/>
+        <h:panelGrid columns="6" cellpadding="10" cellspacing="10" >
+       		<h:outputLabel value = "Código " style="font-weight:bold;margin-right:10px;"/>
+       		<h:outputLabel></h:outputLabel>
+        	<h:outputText id="codSolicitud" value="#{evaluacionMBean.solicitud.codSolicitud}" />
+       
+        	<h:outputLabel value = "Fecha de Solicitud " style="font-weight:bold;margin-right:10px;margin-left:20px;"/>
+        	<h:outputLabel></h:outputLabel>
         	<h:outputText value="#{evaluacionMBean.solicitud.fecha}">
         	<f:convertDateTime pattern="yyyy-MM-dd"/>  
         	</h:outputText> 
         	
-        	<h:outputLabel value = "RUC " style="font-weight:bold;"/>
+        	<h:outputLabel value = "RUC " style="font-weight:bold;;margin-right:10px;"/>
+        	<h:outputLabel></h:outputLabel>
         	<h:outputText value="#{evaluacionMBean.solicitud.locatario.ruc}"/>
+        	
 
-			<h:outputLabel value = "Razón Social " style="font-weight:bold;"/>
+			<h:outputLabel value = "Razón Social " style="font-weight:bold;;margin-right:10px;margin-left:20px;"/>
+			<h:outputLabel></h:outputLabel>
         	<h:outputText value="#{evaluacionMBean.solicitud.locatario.razonSocial}"/>
         	
-        	<h:outputLabel value = "Representante Legal " style="font-weight:bold;"/>
+        	
+        	<h:outputLabel value = "Representante Legal " style="font-weight:bold;margin-right:10px;"/>
+        	<h:outputLabel></h:outputLabel>
         	<h:outputText value="#{evaluacionMBean.solicitud.locatario.representante}"/>
+        	
 
         </h:panelGrid>
     	</p:panel> 
     	
-    	 <p:panel id="evaluacion" header="Evaluación de Solicitud de Alquiler" style="margin-bottom:20px" >
-        <h:panelGrid columns="2" cellpadding="5">
+    	 <p:panel id="evaluacion" header="Evaluación de Solicitud de Alquiler" style="margin-bottom:20px;" >
+        <h:panelGrid columns="4" cellpadding="5">
 
-			<h:panelGrid id="evaSelect" columns="2" cellpadding="10">
-    		<h:outputLabel value = "Evaluador" style="font-weight:bold;"/>
+			<h:panelGrid id="evaSelect" columns="5" >
+    		<h:outputLabel value = "Evaluador" style="font-weight:bold;margin-right:10px"/>
     		<p:selectOneListbox id="evaluadorSelect" value="#{evaluacionMBean.evaluador}" required="true" label="Evaluador"
-			converter="evaluadorConverter"
-    		var="o" filter="true" filterMatchMode="contains" style="width: 300px;">
-            <p:ajax process="@this"  event="change" update=":formRegEval:fecPro" listener="#{evaluacionMBean.getObtenerFecPro}"/>
-            <f:selectItems value="#{evaluadorMBean.listaEvaluadores}" var="eva" 
-            itemLabel="#{eva.colaborador.apellidos}" itemValue="#{eva}" />
+			converter="evaluadorConverter"	
+    		var="o" filter="true" filterMatchMode="contains" style="width: 300px;" >
+            <p:ajax process="@this"  event="change" update=":form:formRegEval:fecPro" listener="#{evaluacionMBean.getObtenerFecPro}"/>
+            <f:selectItems value="#{evaluacionMBean.listaEvaluadores}" var="eva" 
+            itemLabel="#{eva.colaborador.apellidos}" itemValue="#{eva}" id="evaluadores"/>
             <p:column>
                 <h:outputText value="#{o.colaborador.nombres}" />
             </p:column>
@@ -73,24 +99,24 @@
             </p:column>
        	 	</p:selectOneListbox>
         
-        	<p:outputLabel value = "#{evaluacionMBean.mensaje}"/>
-        	
-    		</h:panelGrid>
-    	  	<h:panelGrid columns="2" cellpadding="10">
-        	<h:outputLabel value = "Fecha Propuesta " style="font-weight:bold;"/>
+        	<h:outputLabel value = "Fecha Límite " style="font-weight:bold;margin-right:10px;margin-left:20px"/>
         	<h:outputText id="fecPro" value="#{evaluacionMBean.evaluacion.fechaProp}">
         	<f:convertDateTime pattern="yyyy-MM-dd"/>  
-        	</h:outputText> 
-
-	    
-	    	<h:outputLabel value = "Observación " style="font-weight:bold;"/>
-        	<h:inputTextarea value="#{evaluacionMBean.evaluacion.observacion}" label="Observacion"/>
+        	</h:outputText>         	
+        	
+        	<h:outputLabel value = " "/>
+        	<h:outputLabel value = " "/>
+        	<h:outputLabel value = " "/> 
+	    	<h:outputLabel value = "Observación " style="font-weight:bold;margin-right:10px;margin-top:20px;margin-left:0px;"/>
+        	<h:inputTextarea value="#{evaluacionMBean.evaluacion.observacion}" label="Observacion" style="margin-top:20px"/>
+	    	
+	    	<p:outputLabel value = "#{evaluacionMBean.mensaje}"/>
+	    	
 	    	</h:panelGrid>
-	    
         </h:panelGrid>
     	</p:panel> 
 		
-		<h:panelGrid columns="4" cellpadding="10" >			
+		<h:panelGrid columns="4" style="vertical-align:right;text-align: right;margin-left:600px;" >			
 	 
 	     <p:commandButton value="Grabar" action="#{evaluacionMBean.registrarEvaluacion}" update="message">
 	        <p:confirm header="Confirmación" message="Seguro que desea registrar la evaluación?" icon="ui-icon-alert" />
@@ -113,9 +139,9 @@
 
     </p:panel>
 </h:form>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-        crossorigin="anonymous"></script>
+     		</div>
+         </div>
+    </div>
+</h:form>
 </h:body>
 </html>

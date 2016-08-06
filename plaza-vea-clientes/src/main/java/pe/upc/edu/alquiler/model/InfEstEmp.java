@@ -3,11 +3,15 @@ package pe.upc.edu.alquiler.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -37,20 +41,15 @@ public class InfEstEmp implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idInfEstEmp;
 	
-	@Column(name="idEvaluacion")
-	private Long idEvaluacion;
+	@Column(name="codInfEstEmp")
+	private String codInfEstEmp;
 	
-	@Column(name="actEconPrin")
-	private String actEconPrin;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idEvaluacion")
+	private Evaluacion evaluacion;
 	
-	@Column(name="repLegal")
-	private String repLegal;
-	
-	@Column(name="omisiones")
-	private String omisiones;
-	
-	@Column(name="estadoContri")
-	private String estadoContri;
+	@Column(name="resultado")
+	private String resultado;
 	
 	@Column(name="comentario")
 	private String comentario;
@@ -61,6 +60,31 @@ public class InfEstEmp implements Serializable {
 	
 	@Column(name="estado")
 	private String estado;
+	
+	@Column(name="totalScore")
+	private Double totalScore;
+	
+	@OneToOne(fetch = FetchType.LAZY)	
+	private Sunat sunat;
+	
+	@OneToOne(fetch = FetchType.LAZY)	
+	private InformacionCrediticia informacionCrediticia;
+	
+	public InformacionCrediticia getInformacionCrediticia() {
+		return informacionCrediticia;
+	}
+
+	public void setInformacionCrediticia(InformacionCrediticia informacionCrediticia) {
+		this.informacionCrediticia = informacionCrediticia;
+	}
+
+	public Sunat getSunat() {
+		return sunat;
+	}
+
+	public void setSunat(Sunat sunat) {
+		this.sunat = sunat;
+	}
 
 	public Long getIdInfEstEmp() {
 		return idInfEstEmp;
@@ -68,46 +92,6 @@ public class InfEstEmp implements Serializable {
 
 	public void setIdInfEstEmp(Long idInfEstEmp) {
 		this.idInfEstEmp = idInfEstEmp;
-	}
-
-	public Long getIdEvaluacion() {
-		return idEvaluacion;
-	}
-
-	public void setIdEvaluacion(Long idEvaluacion) {
-		this.idEvaluacion = idEvaluacion;
-	}
-
-	public String getActEconPrin() {
-		return actEconPrin;
-	}
-
-	public void setActEconPrin(String actEconPrin) {
-		this.actEconPrin = actEconPrin;
-	}
-
-	public String getRepLegal() {
-		return repLegal;
-	}
-
-	public void setRepLegal(String repLegal) {
-		this.repLegal = repLegal;
-	}
-
-	public String getOmisiones() {
-		return omisiones;
-	}
-
-	public void setOmisiones(String omisiones) {
-		this.omisiones = omisiones;
-	}
-
-	public String getEstadoContri() {
-		return estadoContri;
-	}
-
-	public void setEstadoContri(String estadoContri) {
-		this.estadoContri = estadoContri;
 	}
 
 	public String getComentario() {
@@ -132,6 +116,38 @@ public class InfEstEmp implements Serializable {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public Evaluacion getEvaluacion() {
+		return evaluacion;
+	}
+
+	public void setEvaluacion(Evaluacion evaluacion) {
+		this.evaluacion = evaluacion;
+	}
+
+	public String getResultado() {
+		return resultado;
+	}
+
+	public void setResultado(String resultado) {
+		this.resultado = resultado;
+	}
+
+	public Double getTotalScore() {
+		return totalScore;
+	}
+
+	public void setTotalScore(Double totalScore) {
+		this.totalScore = totalScore;
+	}
+
+	public String getCodInfEstEmp() {
+		return codInfEstEmp;
+	}
+
+	public void setCodInfEstEmp(String codInfEstEmp) {
+		this.codInfEstEmp = codInfEstEmp;
 	}
 
 	

@@ -9,4 +9,6 @@ public interface InfEstEmpDao {
 	
 	public InfEstEmp obtenerInfEstEmp(long idEvaluacion) throws Exception;
 	
+	public Integer registrarInfEstEmp(InfEstEmp infEstEmp) throws Exception;
+	
 }

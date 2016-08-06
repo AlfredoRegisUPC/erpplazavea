@@ -9,8 +9,10 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Evaluaciones de Alquiler de Espacio Comercial</title>
-        <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
+    <title>Evaluaciones de Solicitudes de Alquiler de Espacio Comercial</title>
+    <h:outputScript library="primefaces" name="jquery/jquery.js" />
+	<h:outputScript library="primefaces" name="jquery/jquery-plugins.js" />
+    <link href="//plazavea.vteximg.com.br/arquivos/favicon.ico" rel="shortcut icon" xmlns="http://www.w3.org/1999/xhtml"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
     <link rel="stylesheet" href="css/main.css"/>
@@ -35,6 +37,8 @@
 	
     <h:panelGrid columns="1" cellpadding="5" >
     <ul class="nav nav-sidebar">
+     <li><a href="#">Gestión de Góndolas</a></li>
+     <li><a href="#">Gestión de Recursos Humanos</a></li>
     <li class="active"><a href="#">Gestión de Terceros</a></li>
     
         <h:commandLink style="color: whitesmoke;" class="nav-subitem-level-1" action="solicitudes" value="Solicitudes de Alquiler de Espacio Comercial"/>
@@ -44,63 +48,102 @@
 
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">Gestión de Terceros</h1>
+            <h1 class="page-header">Evaluaciones de Solicitudes de Alquiler de Espacio Comercial</h1>
             <div  class="main">
     <!-- <h:form id="formSol"> -->
     <div align="right">
 <!--     <p:commandButton action="index" value="Menú"  icon="ui-icon-home"
         style="background-color:rgb(235, 235, 235);background-origin:padding-box; border-bottom-color:rgb(170, 170, 170); font-family:'Varela Round', sans-serif;
         font-size:20px;"/> -->
-    </div>  
+    </div>
+    
+        <p:panel id="evaluacion" header="Evaluación de Solicitud" style="margin-bottom:20px" >
+
+        <h:panelGrid columns="4" cellpadding="5">
+       		
+       		<h:outputLabel for="popupIni" value = "Fec. Eval. Desde" style="font-weight:bold;margin-right:10px;"/>
+        	<p:calendar id="popupIni" value="#{evaluacionMBean.evalFecIni}" pattern="yyyy-MM-dd">
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</p:calendar> 
+        	<h:outputLabel for="popupFin" value = "Fec. Eval. Hasta" style="font-weight:bold;margin-right:10px;margin-left:20px;"/>
+        	<p:calendar id="popupFin" value="#{evaluacionMBean.evalFecFin}" pattern="yyyy-MM-dd" >
+        	<f:convertDateTime pattern="yyyy-MM-dd"/>  
+        	</p:calendar> 
+        	
+        	<h:outputLabel value = "RUC " style="font-weight:bold;margin-left:10px;margin-top:10px;"/>
+        	<p:inputText label = "RUC" value="#{evaluacionMBean.evalRuc}"/>
+	    
+        	<h:outputLabel value = "Razón Social " style="font-weight:bold;margin-right:10px;margin-left:20px;margin-top:10px;"/>
+        	<p:inputText id="razon" label ="Razón Social" value="#{evaluacionMBean.evalRazSoc}" />
+        	
+        	<h:outputLabel value = "Estado " style="font-weight:bold;margin-left:10px;"/>
+        	 <p:selectOneMenu id="estado" value = "#{evaluacionMBean.evalEstado}"  label="Estado">
+        	 <f:selectItem itemLabel="" itemValue="" />
+        	 <f:selectItem itemLabel="Registrada" itemValue="Registrada" />
+        	 <f:selectItem itemLabel="Pendiente" itemValue="Pendiente" />
+        	 <f:selectItem itemLabel="En Proceso" itemValue="En Proceso" />
+            <f:selectItem itemLabel="Aprobada" itemValue="Aprobada" />
+            <f:selectItem itemLabel="Rechazada" itemValue="Rechazada" />
+            <f:selectItem itemLabel="Eliminada" itemValue="Eliminada" />
+            <f:selectItem itemLabel="Vencida" itemValue="Vencida" />
+    	</p:selectOneMenu>
+
+		 <p:commandButton value="Buscar" action="#{evaluacionMBean.getObtenerEvaluaciones}" update=":form:myTable" style="font-weight:bold;margin-left:20px;">
+	    	</p:commandButton>
+	    
+        </h:panelGrid>
+    	</p:panel>
+    	  
 	<p:panel id="basic" header="Lista de Evaluaciones de Solicitud de Alquiler" style="margin-bottom:20px">
         <h:panelGrid columns="1" cellpadding="10">
-            <c:if test="${evaluacionMBean.obtenerEvaluaciones != 0}">
+            <!-- <c:if test="${evaluacionMBean.obtenerEvaluaciones != 0}"> -->
             	<p:dataTable id="myTable" var="eval" value="#{evaluacionMBean.listaEvaluaciones}" 
             	selection="#{evaluacionMBean.evaluacion}" emptyMessage="No existen evaluaciones según los filtros ingresados">
 				    <p:ajax event="rowSelect" update=":form:myTable:selectRowBtn :form:message :form:myTable" listener="#{evaluacionMBean.onRowSelect}" />
-				    <p:column headerText="Id">
-				        <h:outputText value="#{eval.idEvaluacion}" />
+ 				    
+ 				    <p:column headerText="Cód.Eva." style="text-align: center;width:150px" sortBy="#{eval.solicitud.codSolicitud}">
+				        <h:outputText value="#{eval.codEvaluacion}" />				        
 				    </p:column>
 				 
-				    <p:column id="fechaHeader" filterBy="#{eval.fechaCreacion}" sortBy="#{eval.fechaCreacion}">
+				    <p:column id="fechaHeader" style="text-align: center;width:100px" sortBy="#{eval.fechaCreacion}">
 				        <f:facet name="header">
                			 <h:outputText value="Fecha" />
             			</f:facet>
 				        <h:outputText value="#{eval.fechaCreacion}" />
 				    </p:column>
 				 
-				    <p:column id="rucHeader" filterBy="#{eval.solicitud.locatario.ruc}" sortBy="#{eval.solicitud.locatario.ruc}">
+				    <p:column id="rucHeader" style="text-align: center;width:120px" sortBy="#{eval.solicitud.locatario.ruc}">
 				        <f:facet name="header">
                			 <h:outputText value="RUC" />
             			</f:facet>
 				        <h:outputText value="#{eval.solicitud.locatario.ruc}" />
 				    </p:column>
-				    <p:column id="razSocHeader" filterBy="#{eval.solicitud.locatario.razonSocial}" sortBy="#{eval.solicitud.locatario.razonSocial}">
+				    <p:column id="razSocHeader"  sortBy="#{eval.solicitud.locatario.razonSocial}">
 				        <f:facet name="header">
                			 <h:outputText value="Razón Social" />
             			</f:facet>
 				        <h:outputText value="#{eval.solicitud.locatario.razonSocial}" />
 				    </p:column>
 				    
-				      <p:column id="estadoHeader" filterBy="#{eval.estado}" sortBy="#{eval.estado}">
+				      <p:column id="estadoHeader" style="text-align: center;width:120px" sortBy="#{eval.estado}">
 				        <f:facet name="header">
                			 <h:outputText value="Estado" />
             			</f:facet>
 				        <h:outputText value="#{eval.estado}" />
 				    </p:column>
 				    
-				      <p:column style="text-align: center">
+				      <p:column style="text-align: center;width:80px">
 				      <f:facet name="header">
                			 <h:outputText value="Editar" />
             			</f:facet>
 				        <p:commandButton id="selectRowBtn" icon="ui-icon-pencil" style="text-align: center" process="@this"  immediate="true"
 				        actionListener="#{evaluacionMBean.showSelectedEval}" action="#{evaluacionMBean.goEditPage}"
-				        disabled="#{eval.estado == 'Registrada' ? false : true}">
+				        disabled="#{(eval.estado == 'Registrada' || eval.estado == 'Pendiente' || eval.estado == 'Vencida' || eval.estado == 'En Proceso' ) ? false : true}">
 				        <f:attribute name="eval" value="#{eval}"/>
 				        </p:commandButton>
 				      </p:column>
 				      
-				       <p:column style="text-align: center">
+				       <p:column style="text-align: center;width:80px">
 				       <f:facet name="header">
                			 <h:outputText value="Eliminar" />
             			</f:facet>
@@ -117,8 +160,30 @@
 						    </p:confirmDialog>
 				      </p:column>
 				      
+				      <p:column style="text-align: center;width:100px">
+				      <f:facet name="header">
+               			 <h:outputText value="Inf.Est.Emp." />
+            			</f:facet>
+				        <p:commandButton id="selectRowInfEstEmp" icon="ui-icon-document" style="text-align: center" process="@this"  immediate="true"
+				        actionListener="#{evaluacionEmpresarialMBean.showSelectedEval}" action="#{evaluacionMBean.goInfEstEmpPage}"
+				        disabled="#{eval.estado == 'Registrada' ? false : true}">
+				        <f:attribute name="eval" value="#{eval}"/>
+				        </p:commandButton>
+				      </p:column>
+  
+				      <p:column style="text-align: center;width:100px">
+				      <f:facet name="header">
+               			 <h:outputText value="Inf.Red.Soc." />
+            			</f:facet>
+				        <p:commandButton id="selectRowInfRedSoc" icon="ui-icon-document" style="text-align: center" process="@this"  immediate="true"
+				        actionListener="#{infRedSocMBean.showSelectedEval}" action="#{evaluacionMBean.goInfRedSoc}"
+				        disabled="#{eval.estado == 'Pendiente' ? false : true}">
+				        <f:attribute name="eval" value="#{eval}"/>
+				        </p:commandButton>
+				      </p:column>
+				      
 				</p:dataTable>
-            </c:if>
+           <!--  </c:if> -->
         </h:panelGrid>
     </p:panel>
     
@@ -128,9 +193,9 @@
     </div>
     </div>
     </h:form>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
         integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
 </h:body>
 </html>

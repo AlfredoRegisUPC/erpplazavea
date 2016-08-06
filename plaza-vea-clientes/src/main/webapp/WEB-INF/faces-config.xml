@@ -61,6 +61,18 @@
       <from-outcome>regEvaluacion</from-outcome>
       <to-view-id>/regEvaluacion.xhtml</to-view-id>
    </navigation-case>
+   <navigation-case>
+      <from-outcome>infEstEmp</from-outcome>
+      <to-view-id>/infEstEmp.xhtml</to-view-id>
+   </navigation-case>
+   <navigation-case>
+      <from-outcome>infMerc</from-outcome>
+      <to-view-id>/infMerc.xhtml</to-view-id>
+   </navigation-case>
+      <navigation-case>
+      <from-outcome>conSolicitud</from-outcome>
+      <to-view-id>/conSolicitud.xhtml</to-view-id>
+   </navigation-case>
 </navigation-rule>
      
 </faces-config>

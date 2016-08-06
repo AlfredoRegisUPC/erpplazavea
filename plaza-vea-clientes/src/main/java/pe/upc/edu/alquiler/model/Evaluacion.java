@@ -12,21 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
-
-/**
- * CREATE TABLE `plazaveadb`.`local` (
- *  `idlocal` INT NOT NULL AUTO_INCREMENT,
- * `numeroLocal` INT NOT NULL,
- * `ubigeo` VARCHAR(6) NOT NULL,
- * `fechaApertura` DATE NOT NULL,
- * PRIMARY KEY (`idlocal`));
- * @author fest
- *
- */
 
 @Entity
 @Table(name="evaluacion")
@@ -42,8 +30,8 @@ public class Evaluacion implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idEvaluacion;
 	
-	/*@Column(name="idSolicitud")
-	private Long idSolicitud;*/
+	@Column(name="codEvaluacion")
+	private String codEvaluacion;
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idSolicitud")
@@ -77,7 +65,15 @@ public class Evaluacion implements Serializable {
 	@Column(name="usuarioModif")
 	private String usuarioModif;
 
+	//@OneToOne(fetch = FetchType.LAZY, mappedBy = "evaluacion", cascade = CascadeType.ALL)
+	//private InfEstEmp infEstEmp;
+	//private EvaluacionEmpresarial evaEmpresarial;
 	
+	//@OneToOne(fetch = FetchType.LAZY, mappedBy = "evaluacion", cascade = CascadeType.ALL)
+	//private InfSanciones infSanciones;
+	
+	//@OneToOne(fetch = FetchType.LAZY, mappedBy = "evaluacion", cascade = CascadeType.ALL)
+	//private InfRedSoc infEvalMerc;
 
 	public Long getIdEvaluacion() {
 		return idEvaluacion;
@@ -87,13 +83,13 @@ public class Evaluacion implements Serializable {
 		this.idEvaluacion = idEvaluacion;
 	}
 
-	/*public Long getIdSolicitud() {
-		return idSolicitud;
+	public String getCodEvaluacion() {
+		return codEvaluacion;
 	}
 
-	public void setIdSolicitud(Long idSolicitud) {
-		this.idSolicitud = idSolicitud;
-	}*/
+	public void setCodEvaluacion(String codEvaluacion) {
+		this.codEvaluacion = codEvaluacion;
+	}
 
 	public Date getFechaProp() {
 		return fechaProp;
@@ -166,10 +162,5 @@ public class Evaluacion implements Serializable {
 	public void setEvaluador(Evaluador evaluador) {
 		this.evaluador = evaluador;
 	}
-
-	
-
-
-	
 	
 }

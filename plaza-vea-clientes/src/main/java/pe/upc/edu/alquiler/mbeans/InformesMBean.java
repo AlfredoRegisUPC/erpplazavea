@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import pe.upc.edu.alquiler.model.Evaluacion;
 import pe.upc.edu.alquiler.model.InfEstEmp;
-import pe.upc.edu.alquiler.model.InfEvalMerc;
+import pe.upc.edu.alquiler.model.InfRedSoc;
 import pe.upc.edu.alquiler.model.InfSanciones;
 import pe.upc.edu.alquiler.service.AlquilerService;
 
@@ -29,8 +29,8 @@ public class InformesMBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private InfEstEmp infEstEmp;
-	private InfSanciones infSanciones;
-	private InfEvalMerc infEvalMerc;
+	//private InfSanciones infSanciones;
+	private InfRedSoc infRedSoc;
 	
 	private Evaluacion evaluacion;
 	@Autowired
@@ -58,13 +58,13 @@ public class InformesMBean implements Serializable {
 		try {
 			
 			this.infEstEmp = this.alquilerService.obtenerInfEstEmp(idEvaluacion);
-			this.infSanciones = this.alquilerService.obtenerInfSanciones(idEvaluacion);
-			this.infEvalMerc = this.alquilerService.obtenerInfEvalMerc(idEvaluacion);
+			//this.infSanciones = this.alquilerService.obtenerInfSanciones(idEvaluacion);
+			this.infRedSoc = this.alquilerService.obtenerInfEvalMerc(idEvaluacion);
 			
 			InformesMBean infMBean = new InformesMBean();
 			infMBean.setInfEstEmp(infEstEmp);
-			infMBean.setInfSanciones(infSanciones);
-			infMBean.setInfEvalMerc(infEvalMerc);
+			//infMBean.setInfSanciones(infSanciones);
+			infMBean.setInfRedSoc(infRedSoc);
 			
 			Map<String,Object> options = new HashMap<String, Object>();
 	        options.put("resizable", true);
@@ -87,21 +87,22 @@ public class InformesMBean implements Serializable {
 		this.infEstEmp = infEstEmp;
 	}
 
-	public InfSanciones getInfSanciones() {
+	public InfRedSoc getInfRedSoc() {
+		return infRedSoc;
+	}
+
+	public void setInfRedSoc(InfRedSoc infRedSoc) {
+		this.infRedSoc = infRedSoc;
+	}
+
+/*	public InfSanciones getInfSanciones() {
 		return infSanciones;
 	}
 
 	public void setInfSanciones(InfSanciones infSanciones) {
 		this.infSanciones = infSanciones;
-	}
+	}*/
 
-	public InfEvalMerc getInfEvalMerc() {
-		return infEvalMerc;
-	}
-
-	public void setInfEvalMerc(InfEvalMerc infEvalMerc) {
-		this.infEvalMerc = infEvalMerc;
-	}
 
 
 	

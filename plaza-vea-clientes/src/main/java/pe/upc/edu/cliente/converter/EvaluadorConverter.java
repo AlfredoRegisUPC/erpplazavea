@@ -8,7 +8,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import pe.upc.edu.alquiler.mbeans.EvaluacionMBean;
-import pe.upc.edu.alquiler.mbeans.EvaluadorMBean;
 import pe.upc.edu.alquiler.model.Evaluador;
 
 
@@ -29,7 +28,7 @@ public class EvaluadorConverter implements Converter{
 //            return null;
 //        }
     	
-    	final String beanName = "evaluadorMBean";
+    	final String beanName = "evaluacionMBean";
         
         Object bean;
      
@@ -41,7 +40,7 @@ public class EvaluadorConverter implements Converter{
         }
         Evaluador result = null;
         if (bean != null) {
-        	EvaluadorMBean evaluador = (EvaluadorMBean)bean;
+        	EvaluacionMBean evaluador = (EvaluacionMBean)bean;
             for (int i = 0; i < evaluador.getListaEvaluadores().size(); i++) {
             	Evaluador evaluadorb = evaluador.getListaEvaluadores().get(i);
                 if (evaluadorb.getIdEvaluador().equals(new Long(value))) {

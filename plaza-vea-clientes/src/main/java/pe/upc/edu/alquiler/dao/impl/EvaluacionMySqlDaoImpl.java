@@ -1,17 +1,21 @@
 package pe.upc.edu.alquiler.dao.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import pe.upc.edu.alquiler.dao.EvaluacionDao;
 import pe.upc.edu.alquiler.model.Evaluacion;
 import pe.upc.edu.alquiler.model.InfEstEmp;
-import pe.upc.edu.alquiler.model.InfEvalMerc;
+import pe.upc.edu.alquiler.model.InfRedSoc;
 import pe.upc.edu.alquiler.model.InfSanciones;
 import pe.upc.edu.alquiler.model.Solicitud;
 import pe.upc.edu.spring.configuration.AbstractDao;
@@ -80,7 +84,7 @@ public class EvaluacionMySqlDaoImpl extends AbstractDao implements EvaluacionDao
         evaluacion.setIdEvaluacion((long)idEvaluacion);
 
         getSession().save(evaluacion);
-        //Guardar informes PRUEBAS
+        /*//Guardar informes PRUEBAS
         query = getSession().createQuery("select max(idInfEstEmp) from InfEstEmp");
         Integer idInfEstEmp = 1;
 		
@@ -138,25 +142,30 @@ public class EvaluacionMySqlDaoImpl extends AbstractDao implements EvaluacionDao
         
         getSession().save(infEvalMerc);
         // Guardar informes PRUEBA
-		
+*/		
 		return idEvaluacion;
         
 	}
 
 	@Override
 	public Integer actualizarEvaluacion(Evaluacion evaluacion) throws Exception {
-		String hql = "update Evaluacion set estado = :estado, fechaModif= :fecMod, observacion = :obs where idEvaluacion = :id";
+		
+		/*String hql = "update Evaluacion set estado = :estado, fechaModif= :fecMod, observacion = :obs where idEvaluacion = :id";
 		 
 		Query query = getSession().createQuery(hql);
 		query.setParameter("estado", evaluacion.getEstado());
 		query.setParameter("fecMod", new Date());
 		query.setParameter("obs", evaluacion.getObservacion());
-		query.setParameter("id", evaluacion.getIdEvaluacion());
+		query.setParameter("id", evaluacion.getIdEvaluacion());*/
+		
+		evaluacion.setFechaModif(new Date());
 		 
-		int rowsAffected = query.executeUpdate();
-		if (rowsAffected > 0) {
-		    System.out.println("Updated " + rowsAffected + " rows.");
-		}
+		getSession().update(evaluacion);
+		
+		//int rowsAffected = query.executeUpdate();
+		//if (rowsAffected > 0) {
+		    //System.out.println("Updated " + rowsAffected + " rows.");
+		//}
 		return 1;
 	}
 
@@ -167,11 +176,102 @@ public class EvaluacionMySqlDaoImpl extends AbstractDao implements EvaluacionDao
 			
 		Object[] row = (Object[]) getSession().createQuery(hql).uniqueResult();
 
+		Evaluacion eval = null;
+		if(row!=null){
+		eval = (Evaluacion)row[0];
+		Solicitud sol = (Solicitud)row[1];
+		eval.setSolicitud(sol);
+		}
+
+		return eval;
+	}
+	
+	@Override
+	public List<Evaluacion> listarEvaluacionesFiltro(String ruc, String razonSocial, Date fecEvalIni, Date fecEvalFin, String estado) throws Exception {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+			
+		Criteria c = getSession().createCriteria(Evaluacion.class, "eva");
+		if (estado != null && !estado.equals(""))
+		c.add((estado == null || estado.equals("")) ? Restrictions.isNull("eva.estado") : Restrictions.eq("eva.estado", estado));
+		if (fecEvalIni != null && !fecEvalIni.equals(""))
+		c.add((fecEvalIni == null || fecEvalIni.equals("")) ? Restrictions.isNull("eva.fechaCreacion") : Restrictions.ge("eva.fechaCreacion", fecEvalIni));
+		if (fecEvalFin != null && !fecEvalFin.equals(""))
+			c.add((fecEvalFin == null || fecEvalFin.equals("")) ? Restrictions.isNull("eva.fechaCreacion") : Restrictions.lt("eva.fechaCreacion", fecEvalFin));
+			
+		c.createCriteria("eva.solicitud" , "sol");
+		c.createCriteria("sol.locatario" , "loc");
+		if (ruc != null && !ruc.equals("") || razonSocial != null && !razonSocial.equals("")){	
+		if (ruc != null && !ruc.equals("") )
+		c.add((ruc == null || ruc.equals("")) ? Restrictions.isNull("loc.ruc") : Restrictions.eq("loc.ruc", ruc));
+		if (razonSocial != null && !razonSocial.equals(""))
+		c.add((razonSocial == null || razonSocial.equals("")) ? Restrictions.isNull("loc.razonSocial") : Restrictions.eq("loc.razonSocial", razonSocial));
+		}
+
+		List<Evaluacion> listEvaluaciones = c.list();
+		
+		System.out.println("Las evaluaciones son " + listEvaluaciones.size());
+        return listEvaluaciones;
+	}
+	
+	@Override
+	public Integer actualizarEstadoEvaluacion(long idEvaluacion, long idSolicitud, String estado) throws Exception {
+		// TODO Auto-generated method stub
+		//Retornar el idSolicitud
+		String hql = "update Evaluacion set estado = :estado where idEvaluacion = :id";
+		 
+		Query query = getSession().createQuery(hql);
+		query.setParameter("estado", estado);
+		query.setParameter("id", idEvaluacion);
+		 
+		int rowsAffected = query.executeUpdate();
+		if (rowsAffected > 0) {
+			hql = "update Solicitud set estado = :estado where idSolicitud = :id";
+			 
+			query = getSession().createQuery(hql);
+			query.setParameter("estado", estado);
+			query.setParameter("id", idSolicitud);
+			 
+			rowsAffected = query.executeUpdate();
+			if (rowsAffected > 0) {
+			    System.out.println("Updated " + rowsAffected + " rows.");
+			}
+		}
+		
+		return 1;
+	}
+	
+	@Override
+	public Evaluacion obtenerEvaluacionSol(long idSolicitud)
+			throws Exception {
+		String hql = "from Evaluacion ev, Solicitud s, Locatario l where ev.solicitud = s.idSolicitud and s.locatario = l.idLocatario and ev.solicitud = " + idSolicitud;
+			
+		Object[] row = (Object[]) getSession().createQuery(hql).uniqueResult();
+
 			Evaluacion eval = (Evaluacion)row[0];
 			Solicitud sol = (Solicitud)row[1];
 			eval.setSolicitud(sol);
 
 			return eval;
+	}
+	
+	@Override
+	public List<Evaluacion> listarEvaluacionesVencidas() throws Exception {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String[] estados = { "Registrada", "Pendiente" };
+			
+		Criteria c = getSession().createCriteria(Evaluacion.class, "eva");
+		c.add(Restrictions.in("eva.estado", estados ));
+		c.add(Restrictions.le("eva.fechaProp", new Date()));
+		c.createCriteria("eva.solicitud" , "sol");
+			
+		List<Evaluacion> listEvaluaciones = c.list();
+		
+		System.out.println("Las evaluaciones vencidas son " + listEvaluaciones.size());
+        return listEvaluaciones;
 	}
 	
 }

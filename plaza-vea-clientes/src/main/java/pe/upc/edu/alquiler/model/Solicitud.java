@@ -2,6 +2,8 @@ package pe.upc.edu.alquiler.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -54,12 +56,13 @@ public class Solicitud implements Serializable {
 	
 	@Column(name="estado")
 	private String estado;
-
-	@Column(name="idLocacion")
-	private Long idLocacion;
 	
-	/*@Column(name="idLocatario")
-	private Long idLocatario;*/
+	@ManyToOne
+    @JoinColumn(name = "idLocacion")
+	private Locacion locacion;
+
+	/*@Column(name="idLocacion")
+	private Long idLocacion;*/
 	
 	@ManyToOne
     @JoinColumn(name = "idLocatario")
@@ -68,8 +71,9 @@ public class Solicitud implements Serializable {
 	@Column(name="usuarioCreacion")
 	private String usuarioCreacion;
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "solicitud", cascade = CascadeType.ALL)
-	private Evaluacion evaluacion;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.solicitud", cascade=CascadeType.ALL)
+	private Set<EntregaDoc> entregaDoc = new HashSet<EntregaDoc>(0);
+
 
 
 	public Long getIdSolicitud() {
@@ -112,21 +116,13 @@ public class Solicitud implements Serializable {
 		this.estado = estado;
 	}
 
-	public Long getIdLocacion() {
-		return idLocacion;
+	public Locacion getLocacion() {
+		return locacion;
 	}
 
-	public void setIdLocacion(Long idLocacion) {
-		this.idLocacion = idLocacion;
+	public void setLocacion(Locacion locacion) {
+		this.locacion = locacion;
 	}
-
-	/*public Long getIdLocatario() {
-		return idLocatario;
-	}
-
-	public void setIdLocatario(Long idLocatario) {
-		this.idLocatario = idLocatario;
-	}*/
 
 	public String getUsuarioCreacion() {
 		return usuarioCreacion;
@@ -143,7 +139,16 @@ public class Solicitud implements Serializable {
 	public void setLocatario(Locatario locatario) {
 		this.locatario = locatario;
 	}
-	
+
+	public Set<EntregaDoc> getEntregaDoc() {
+		return entregaDoc;
+	}
+
+	public void setEntregaDoc(Set<EntregaDoc> entregaDoc) {
+		this.entregaDoc = entregaDoc;
+	}
+
+
 	
 	
 	

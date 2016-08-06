@@ -1,29 +1,28 @@
 package pe.upc.edu.alquiler.mbeans;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import pe.upc.edu.alquiler.model.EntregaDoc;
 import pe.upc.edu.alquiler.model.Evaluacion;
-import pe.upc.edu.alquiler.model.Evaluador;
+import pe.upc.edu.alquiler.model.EvaluacionEmpresarial;
+import pe.upc.edu.alquiler.model.EvaluacionRedSocial;
 import pe.upc.edu.alquiler.model.Locacion;
 import pe.upc.edu.alquiler.model.Locatario;
+import pe.upc.edu.alquiler.model.Requisito;
 import pe.upc.edu.alquiler.model.Solicitud;
 import pe.upc.edu.alquiler.service.AlquilerService;
 
@@ -46,12 +45,28 @@ public class SolicitudMBean implements Serializable {
 	}
 	
 	private Locatario locatario = new Locatario();
-	private String[] selectedRequisitos = null;
+	//private String[] selectedRequisitos = null;
+	private Requisito[] selectedRequisitos = null;
 	private Locacion locacion = new Locacion();
 	
 	FacesContext facesContext = FacesContext.getCurrentInstance();
 	
 	private Boolean disabled = true;
+	
+	private Date solFecIni;
+	private Date solFecFin;
+	private String solRuc;
+	private String solRazSoc;
+	private String solEstado;
+	
+	
+	private Evaluacion evaluacion;
+	private EvaluacionEmpresarial infEstEmp;
+	private EvaluacionRedSocial infRedSoc;
+	
+	private String menEval;
+	private String menInfEstEmp;
+	private String menInfRedSoc;
 	
 	@Autowired
 	private AlquilerService alquilerService;
@@ -62,7 +77,13 @@ public class SolicitudMBean implements Serializable {
 	
 	public int getObtenerSolicitudes() {
 		try {
-			this.listaSolicitudes = this.alquilerService.listarSolicitudes();
+			//this.listaSolicitudes = this.alquilerService.listarSolicitudes();
+			this.listaSolicitudes = this.alquilerService.listarSolicitudesFiltro(solRuc, solRazSoc, solFecIni, solFecFin, solEstado);
+			solRuc = null;
+			solRazSoc = null;
+			solFecIni = null;
+			solFecFin = null;
+			solEstado = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,15 +105,13 @@ public class SolicitudMBean implements Serializable {
 			
 			if(locatario.getIdLocatario()==null){			
 				idLocatario = this.alquilerService.registrarLocatario(locatario);
-				//solicitud.setIdLocatario((long) idLocatario);
 				solicitud.setLocatario(this.alquilerService.obtenerLocatario(locatario.getRuc()));
 			}
 			else{
-			//solicitud.setIdLocatario(locatario.getIdLocatario());
 				solicitud.setLocatario(locatario);
 				idLocatario = Integer.parseInt(String.valueOf(locatario.getIdLocatario()));
 			}
-			solicitud.setIdLocacion(locacion.getIdLocacion());
+			solicitud.setLocacion(locacion);
 			solicitud.setEstado("Registrada");
 			solicitud.setFecha(new Date());
 			solicitud.setUsuarioCreacion("RECEPCIONISTA");
@@ -104,45 +123,21 @@ public class SolicitudMBean implements Serializable {
 			idSolicitud =  this.alquilerService.registrarSolicitud(solicitud);
 			if(idSolicitud > 0){
 				//Al registrar una solicitud se registra la entrega de documentos
-				
+				solicitud.setIdSolicitud((long) idSolicitud);
 				for (int i = 0; i < selectedRequisitos.length; i++) {
 					EntregaDoc reqEntrega = new EntregaDoc();
-					reqEntrega.setIdRequisito(Long.valueOf(selectedRequisitos[i]));
-					reqEntrega.setIdSolicitud(String.valueOf(idSolicitud));
+					reqEntrega.setRequisito(selectedRequisitos[i]);
+					reqEntrega.setSolicitud(solicitud);
 					reqEntrega.setFechaEntrega(new Date());
 					reqEntrega.setEstado("Entregado");
 					this.alquilerService.registrarEntregaDoc(reqEntrega);
 				}				
 				
-				/*//Al registrar una solicitud se autoregistra una evaluación con un evaluador disponible 
-				int idEvaluacion = 0;
-				Evaluacion evaluacion = new Evaluacion();
-				//evaluacion.setIdSolicitud((long) idSolicitud);
-				evaluacion.setSolicitud(solicitud);
-				Evaluador evaluador = this.alquilerService.evaluadorDisponible();
-				//evaluacion.setIdEvaluador(evaluador.getIdEvaluador());
-				evaluacion.setEvaluador(evaluador);
-				//Cambiar fecha propuesta según RN*****
-				Calendar fechaProp = new GregorianCalendar();			
-				fechaProp.add(Calendar.DATE, 7);
-				evaluacion.setFechaProp(new Date(fechaProp.getTimeInMillis()));
-				//Cambiar estado inicial según RN
-				evaluacion.setEstado("Registrada");
-				evaluacion.setFechaCreacion(new Date());
-				evaluacion.setUsuarioCreacion("EVALUADOR");*/
-				//ALICIA
 				if(locatario.getRuc().length()>=12){
 					context.addMessage(null, new FacesMessage("Información",  "En número de RUC solo debe contener 11 dígitos") );
 					return null;
 				}
-				/*//ALICIA
-				//Completar datos de evaluación
-				idEvaluacion = this.alquilerService.registrarEvaluacion(evaluacion);
-				if(idEvaluacion>0)
-					//Si se registra la evaluación se cambia el estado del evaluador a No disponible
-					this.alquilerService.actualizarEvaluador(evaluacion.getEvaluador().getIdEvaluador(), "No Disponible", new Date(fechaProp.getTimeInMillis()));
-				*/
-				//if(idSolicitud>0 && idEvaluacion>0 && idLocatario>0)
+
 				if(idSolicitud>0 && idLocatario>0)
 					context.addMessage(null, new FacesMessage("Información",  "La solicitud fue registrada satisfactoriamente") );
 				else
@@ -164,7 +159,7 @@ public class SolicitudMBean implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "index";
+		return "solicitudes";
 	}
 	
 	public String cancelaSolicitud(){
@@ -174,7 +169,7 @@ public class SolicitudMBean implements Serializable {
 		solicitud = new Solicitud();
 	    selectedRequisitos = null;
 		}
-		return "index";
+		return "solicitudes";
 	}
 
 	public void getObtenerLocatario() {
@@ -236,11 +231,13 @@ public class SolicitudMBean implements Serializable {
 		this.locatario = locatario;
 	}
 
-	public String[] getSelectedRequisitos() {
+
+
+	public Requisito[] getSelectedRequisitos() {
 		return selectedRequisitos;
 	}
 
-	public void setSelectedRequisitos(String[] selectedRequisitos) {
+	public void setSelectedRequisitos(Requisito[] selectedRequisitos) {
 		this.selectedRequisitos = selectedRequisitos;
 	}
 
@@ -264,9 +261,52 @@ public class SolicitudMBean implements Serializable {
 		
 	}
 	
+	public void showSolicitud(ActionEvent event){
+		try {
+			menEval = "";
+			menInfEstEmp = "";
+			menInfRedSoc = "";
+			
+			this.solicitud = (Solicitud) event.getComponent().getAttributes().get("sol");
+			System.out.println("Solicitud: " + solicitud.getIdSolicitud());
+			this.evaluacion = this.alquilerService.obtenerEvaluacionSol(solicitud.getIdSolicitud());
+			if(evaluacion==null){
+				menEval = "La solicitud no tiene evaluación registrada";
+				menInfEstEmp = "La solicitud no cuenta con Informe de Estado Empresarial registrado";
+				menInfRedSoc = "La solicitud no cuenta Informe de Redes Sociales registrado";
+			}
+			else{
+				this.infEstEmp = this.alquilerService.obtenerEvaluacionEmpresarial(evaluacion.getIdEvaluacion());
+				if(infEstEmp==null)
+					menInfEstEmp = "La solicitud no tiene informe de estado empresarial registrado";
+				else{
+					infEstEmp.setCodInfEstEmp(solicitud.getCodSolicitud().replace("SOL", "IEE"));
+					infEstEmp.setFecha(solicitud.getFecha());
+				}
+				
+				this.infRedSoc = this.alquilerService.obtenerEvaluacionRedSocial(evaluacion.getIdEvaluacion());
+				if(infRedSoc==null)
+					menInfRedSoc = "La solicitud no tiene informe de redes sociales registrado";
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public String goEvalSol() {
-		   return "regEvaluacion";
+			RequestContext.getCurrentInstance().update("formRegEval:evaluadores");
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.update("formRegEval");
+		   return "regEvaluacion?faces-redirect=true";
 	   }
+	
+	public String goConsSol() {
+
+	   return "conSolicitud";
+   }
+	
 
 	public Boolean getDisabled() {
 		return disabled;
@@ -282,24 +322,110 @@ public class SolicitudMBean implements Serializable {
 		else
 			disabled = false;
 	}
-//	public void validaNumero(FacesContext context, UIComponent toValidate, Object value) {
-//        boolean valida = false;
-//        if(value != null){      
-//           for (char letra : (String.valueOf(value)).toCharArray()) { 
-//              if(letra < '0' || letra < '9') { 
-//                 valida = true;
-//                 break; 
-//            } 
-//              
-//         }
-//         ((UIInput) toValidate).setValid(!valida);
-//         
-//         if(valida){
-//        FacesMessage message = new FacesMessage(" Debe ingresar un RUC válido !");
-//        message.setSeverity(FacesMessage.SEVERITY_ERROR);
-//        context.addMessage(toValidate.getClientId(context), message);
-//         }
-//        }
-//	}
+
+	public String getSolRuc() {
+		return solRuc;
+	}
+
+	public Date getSolFecIni() {
+		return solFecIni;
+	}
+
+	public void setSolFecIni(Date solFecIni) {
+		this.solFecIni = solFecIni;
+	}
+
+	public Date getSolFecFin() {
+		return solFecFin;
+	}
+
+	public void setSolFecFin(Date solFecFin) {
+		this.solFecFin = solFecFin;
+	}
+
+	public void setSolRuc(String solRuc) {
+		this.solRuc = solRuc;
+	}
+
+	public String getSolRazSoc() {
+		return solRazSoc;
+	}
+
+	public void setSolRazSoc(String solRazSoc) {
+		this.solRazSoc = solRazSoc;
+	}
+
+	public String getSolEstado() {
+		return solEstado;
+	}
+
+	public void setSolEstado(String solEstado) {
+		this.solEstado = solEstado;
+	}
+	
+	
+	public Evaluacion getEvaluacion() {
+		return evaluacion;
+	}
+
+	public void setEvaluacion(Evaluacion evaluacion) {
+		this.evaluacion = evaluacion;
+	}
+
+	public EvaluacionEmpresarial getInfEstEmp() {
+		return infEstEmp;
+	}
+
+	public void setInfEstEmp(EvaluacionEmpresarial infEstEmp) {
+		this.infEstEmp = infEstEmp;
+	}
+
+	public EvaluacionRedSocial getInfRedSoc() {
+		return infRedSoc;
+	}
+
+	public void setInfRedSoc(EvaluacionRedSocial infRedSoc) {
+		this.infRedSoc = infRedSoc;
+	}
+
+	public String cerrarConSol(){
+		
+		solicitud = new Solicitud();
+		evaluacion = new Evaluacion();
+		infEstEmp = new EvaluacionEmpresarial();
+		infRedSoc = new EvaluacionRedSocial();
+		
+		menEval = "";
+		menInfEstEmp = "";
+		menInfRedSoc = "";
+		
+		return "solicitudes";
+	}
+
+	public String getMenEval() {
+		return menEval;
+	}
+
+	public void setMenEval(String menEval) {
+		this.menEval = menEval;
+	}
+
+	public String getMenInfEstEmp() {
+		return menInfEstEmp;
+	}
+
+	public void setMenInfEstEmp(String menInfEstEmp) {
+		this.menInfEstEmp = menInfEstEmp;
+	}
+
+	public String getMenInfRedSoc() {
+		return menInfRedSoc;
+	}
+
+	public void setMenInfRedSoc(String menInfRedSoc) {
+		this.menInfRedSoc = menInfRedSoc;
+	}
+	
+	
 
 }

@@ -24,7 +24,8 @@ public class RequisitoMBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private List<Requisito> listaRequisitos;
-	 private String[] selectedRequisitos;
+	 //private String[] selectedRequisitos;
+	private Requisito[] selectedRequisitos;
 
 	private Requisito requisito;
 	
@@ -69,14 +70,15 @@ public class RequisitoMBean implements Serializable {
 		this.requisito = requisito;
 	}
 
-	public String[] getSelectedRequisitos() {
+	public Requisito[] getSelectedRequisitos() {
 		return selectedRequisitos;
 	}
 
-	public void setSelectedRequisitos(String[] selectedRequisitos) {
+	public void setSelectedRequisitos(Requisito[] selectedRequisitos) {
 		this.selectedRequisitos = selectedRequisitos;
 	}
 
+	
 	
 
 }

@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import pe.upc.edu.alquiler.dao.LocatarioDao;
 import pe.upc.edu.alquiler.model.Locatario;
+import pe.upc.edu.alquiler.model.Numerador;
+import pe.upc.edu.alquiler.model.NumeradorLlave;
 import pe.upc.edu.spring.configuration.AbstractDao;
 
 @Transactional
@@ -34,6 +36,14 @@ public class LocatarioMySqlDaoImpl extends AbstractDao implements LocatarioDao {
         locatario.setIdLocatario((long)idLocatario);
         getSession().save(locatario);
         
+        Numerador n = new Numerador();
+        NumeradorLlave nll = new NumeradorLlave();
+        nll.setAno(2016);
+        nll.setLocatario(locatario);
+        n.setNumeradorLlave(nll);
+        n.setSecuencia(0);
+        
+        getSession().save(n);
 		
 		return idLocatario;
 	}

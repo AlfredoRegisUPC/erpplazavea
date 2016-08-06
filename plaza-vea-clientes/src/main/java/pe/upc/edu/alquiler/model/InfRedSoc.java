@@ -3,11 +3,15 @@ package pe.upc.edu.alquiler.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -25,7 +29,7 @@ import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name="infEvalMerc")
-public class InfEvalMerc implements Serializable {
+public class InfRedSoc implements Serializable {
 
 	/**
 	 * 
@@ -37,8 +41,13 @@ public class InfEvalMerc implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long idInfEvalMerc;
 	
-	@Column(name="idEvaluacion")
-	private Long idEvaluacion;
+	@Column(name="codInfRedSoc")
+	private String codInfRedSoc;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idEvaluacion")
+	private Evaluacion evaluacion;
+	
 	
 	@Column(name="tipoRecep")
 	private String tipoRecep;
@@ -69,15 +78,7 @@ public class InfEvalMerc implements Serializable {
 	public void setIdInfEvalMerc(Long idInfEvalMerc) {
 		this.idInfEvalMerc = idInfEvalMerc;
 	}
-
-	public Long getIdEvaluacion() {
-		return idEvaluacion;
-	}
-
-	public void setIdEvaluacion(Long idEvaluacion) {
-		this.idEvaluacion = idEvaluacion;
-	}
-
+	
 	public String getTipoRecep() {
 		return tipoRecep;
 	}
@@ -132,6 +133,22 @@ public class InfEvalMerc implements Serializable {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public Evaluacion getEvaluacion() {
+		return evaluacion;
+	}
+
+	public void setEvaluacion(Evaluacion evaluacion) {
+		this.evaluacion = evaluacion;
+	}
+
+	public String getCodInfRedSoc() {
+		return codInfRedSoc;
+	}
+
+	public void setCodInfRedSoc(String codInfRedSoc) {
+		this.codInfRedSoc = codInfRedSoc;
 	}
 
 	
